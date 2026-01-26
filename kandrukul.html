@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Озеро Кандрыкуль - Башкортостан</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Стили такие же как в bannoe-lake.html, меняем только цвета акцента */
+        :root {
+            --primary: #98783cbb;
+            --secondary: #b68f59b4;
+            --accent: #ceba8fca;
+            --light: #f8f9fd;
+            --dark: #1a1f1b;
+        }
+
+        ::selection {
+            background-color: #b68f59;
+            color:rgb(255, 248, 237)
+        }
+        
+        /* Остальные стили такие же как в bannoe-lake.html */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(7px);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+
+        .logo a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .back-btn {
+            background-color: var(--accent);
+            color: var(--dark);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid var(--accent);
+        }
+
+        .back-btn:hover {
+            background-color: transparent;
+            color: var(--accent);
+        }
+
+        /* Hero Section */
+        .lake-hero {
+            height: 60vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        url('Фон Кандрыкуль.jpg') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 0 2rem;
+            margin-top: 80px;
+        }
+
+        .lake-hero-content {
+            max-width: 800px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .lake-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .lake-hero p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        /* Lake Details Section */
+        .lake-details {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .lake-info h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .lake-info h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent);
+            border-radius: 2px;
+        }
+
+        .lake-info p {
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+
+        .lake-stats {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+
+        .stats-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .stat-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .stat-value {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        /* Gallery Section */
+        .lake-gallery {
+            margin-bottom: 3rem;
+        }
+
+        .gallery-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            border-radius: 10px;
+            overflow: hidden;
+            height: 250px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Activities Section */
+        .activities {
+            background-color: white;
+            padding: 3rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+        }
+
+        .activities-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .activity-card {
+            text-align: center;
+            padding: 2rem 1rem;
+            border-radius: 10px;
+            background-color: var(--light);
+            transition: all 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-icon {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .activity-card h3 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .activity-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Location Section */
+        .location {
+            margin-bottom: 3rem;
+        }
+
+        .location-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .location-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .location-info p {
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+
+        .location-map {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            height: 300px;
+        }
+
+        .location-map iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 2rem 1rem;
+            text-align: center;
+        }
+
+        .copyright {
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .location-content {
+                grid-template-columns: 1fr;
+            }
+
+            .lake-hero {
+                height: 50vh;
+                margin-top: 70px;
+            }
+
+            .lake-hero h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-mountain"></i>
+                <a href="main.html">Туризм Башкортостана</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="main.html#lakes">Все озера</a></li>
+                <li><a href="main.html#places">Другие места</a></li>
+                <li><a href="main.html#contact">Контакты</a></li>
+                <li><a href="main.html" class="back-btn">На главную</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="lake-hero">
+        <div class="lake-hero-content">
+            <h1>Озеро Кандрыкуль</h1>
+            <p>Второе по величине озеро Башкортостана с живописными островами</p>
+        </div>
+    </section>
+
+    <!-- Lake Details Section -->
+    <section class="lake-details">
+        <div class="details-grid">
+            <div class="lake-info">
+                <h2>О озере</h2>
+                <p>Озеро Кандрыкуль — второе по величине озеро Башкортостана, расположенное в Туймазинском районе. Озеро славится своими живописными берегами, чистой водой и уникальными островами.</p>
+                <p>Название озера происходит от башкирских слов "кан" — "кровь" и "ды" — "озеро", что связано с легендой о битве, произошедшей на его берегах. Однако есть и другие версии происхождения названия.</p>
+                <p>Озеро имеет карстовое происхождение и питается подземными источниками. На озере расположено несколько островов, самый крупный из которых — Утрау. Берега разнообразны: от пологих песчаных пляжей до крутых обрывистых склонов.</p>
+                <p>Кандрыкуль и его окрестности являются популярным местом отдыха. Здесь создана вся необходимая инфраструктура для комфортного пребывания туристов, включая базы отдыха, кемпинги и пляжи.</p>
+            </div>
+            <div class="lake-stats">
+                <h3 class="stats-title">Характеристики</h3>
+                <div class="stat-item">
+                    <span class="stat-name">Площадь</span>
+                    <span class="stat-value">15,6 км²</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-name">Глубина</span>
+                    <span class="stat-value">16,5 м</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-name">Высота над уровнем моря</span>
+                    <span class="stat-value">157 м</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-name">Длина</span>
+                    <span class="stat-value">6,9 км</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-name">Ширина</span>
+                    <span class="stat-value">3,5 км</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-name">Острова</span>
+                    <span class="stat-value">4</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery Section -->
+        <div class="lake-gallery">
+            <h2 class="gallery-title">Галерея</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="Кандрыкуль.jpg" alt="Озеро Кандрыкуль">
+                </div>
+                <div class="gallery-item">
+                    <img src="Берег Кандрыкуль.jpg" alt="Берег Кандрыкуля">
+                </div>
+                <div class="gallery-item">
+                    <img src="Зима кандрыкуль.jpg" alt="Зимний Кандрыкуль">
+                </div>
+            </div>
+        </div>
+
+        <!-- Activities Section -->
+        <div class="activities">
+            <h2 class="activities-title">Чем заняться</h2>
+            <div class="activities-grid">
+                <div class="activity-card">
+                    <div class="activity-icon">
+                        <i class="fas fa-swimmer"></i>
+                    </div>
+                    <h3>Купание</h3>
+                    <p>Чистая вода и оборудованные пляжи делают озеро отличным местом для купания.</p>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-icon">
+                        <i class="fas fa-fish"></i>
+                    </div>
+                    <h3>Рыбалка</h3>
+                    <p>Богатая ихтиофауна: окунь, щука, лещ, плотва, карась и другие виды рыб.</p>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-icon">
+                        <i class="fas fa-ship"></i>
+                    </div>
+                    <h3>Прогулки на лодке</h3>
+                    <p>Возможность арендовать лодку и исследовать живописные острова озера.</p>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-icon">
+                        <i class="fas fa-campground"></i>
+                    </div>
+                    <h3>Кемпинг</h3>
+                    <p>Множество оборудованных мест для палаточных лагерей на берегу озера.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Location Section -->
+        <div class="location">
+            <h2 class="location-title">Как добраться</h2>
+            <div class="location-content">
+                <div class="location-info">
+                    <p>Озеро Кандрыкуль расположено в Туймазинском районе Башкортостана, в 25 км к юго-западу от города Туймазы.</p>
+                    <p><strong>На автомобиле:</strong> Из Уфы по трассе М5 до поворота на Туймазы, затем по указателям на озеро Кандрыкуль. Общее расстояние - около 120 км.</p>
+                    <p><strong>Общественным транспортом:</strong> Автобусом до города Туймазы, затем местным транспортом или такси до озера.</p>
+                    <p>На берегу озера расположены многочисленные базы отдыха, гостиницы и кемпинги. Также есть возможность остановиться в близлежащих деревнях.</p>
+                </div>
+                <div class="location-map">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d88924.442015022!2d53.96520239999999!3d54.533056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x43f84f9c3c0b4a0d%3A0x8c8b7f8c8c8c8c8c!2z0JrQvtC00YvRj9C60YPRgNC40L3RiyDQmtCw0L3RgdC40Y8!5e0!3m2!1sru!2sru!4v1690000000000"
+                        allowfullscreen="" 
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="copyright">
+            <p>&copy; 2025 Туристический портал Башкортостана. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

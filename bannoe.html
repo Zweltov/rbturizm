@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Озеро Банное (Яктыкуль) - Башкортостан</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        ::selection {
+            background-color: #4a7c59;
+            color:rgb(255, 248, 237)
+        }
+
+        :root {
+            --primary: #2c5530c1;
+            --secondary: #4a7c59b7;
+            --accent: #8fb996;
+            --light: #f5f9f6;
+            --dark: #1a1f1b;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden; 
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.145);
+            backdrop-filter: blur(7px);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+
+        .logo a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .back-btn {
+            background-color: var(--accent);
+            color: var(--dark);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid var(--accent);
+        }
+
+        .back-btn:hover {
+            background-color: transparent;
+            color: var(--accent);
+        }
+
+        /* Hero Section */
+        .lake-hero {
+            height: 60vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        url('Банное.jpg') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 0 2rem;
+            margin-top: 80px;
+        }
+
+        .lake-hero-content {
+            max-width: 800px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .lake-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .lake-hero p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        /* Lake Details Section */
+        .lake-details {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .lake-info h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .lake-info h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent);
+            border-radius: 2px;
+        }
+
+        .lake-info p {
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+
+        .lake-stats {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+
+        .stats-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .stat-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .stat-value {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        /* Gallery Section */
+        .lake-gallery {
+            margin-bottom: 3rem;
+        }
+
+        .gallery-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            border-radius: 10px;
+            overflow: hidden;
+            height: 250px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Activities Section */
+        .activities {
+            background-color: white;
+            padding: 3rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+        }
+
+        .activities-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .activity-card {
+            text-align: center;
+            padding: 2rem 1rem;
+            border-radius: 10px;
+            background-color: var(--light);
+            transition: all 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-icon {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .activity-card h3 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .activity-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Location Section */
+        .location {
+            margin-bottom: 3rem;
+        }
+
+        .location-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .location-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .location-info p {
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+
+        .location-map {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            height: 300px;
+        }
+
+        .location-map iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 2rem 1rem;
+            text-align: center;
+        }
+
+        .copyright {
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .location-content {
+                grid-template-columns: 1fr;
+            }
+
+            .lake-hero {
+                height: 50vh;
+                margin-top: 70px;
+            }
+
+            .lake-hero h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-mountain"></i>
+                <a href="main.html">Туризм Башкортостана</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="main.html#lakes">Все озера</a></li>
+                <li><a href="main.html#places">Другие места</a></li>
+                <li><a href="main.html#contact">Контакты</a></li>
+                <li><a href="main.html" class="back-btn">На главную</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="lake-hero">
+        <div class="lake-hero-content">
+            <h1>Озеро Банное (Яктыкуль)</h1>
+            <p>Самое глубокое и одно из самых живописных озер Башкортостана</p>
+        </div>
+    </section>
+
+    <!-- Lake Details Section -->
+    <section class="lake-details">
+        <div class="details-grid">
+            <div class="lake-info">
+                <h2>О озере</h2>
+                <p>Озеро Банное, также известное как Яктыкуль, — самое глубокое озеро Башкортостана, расположенное в живописной котловине между гор. Его кристально чистая вода и окружающие пейзажи делают это место одним из самых популярных туристических направлений в регионе.</p>
+                <p>Название "Банное" связано с легендой, согласно которой Емельян Пугачев приказал своему войску "баниться" — то есть мыться в озере перед боем. Башкирское название "Яктыкуль" переводится как "светлое озеро".</p>
+                <p>Озеро имеет тектоническое происхождение и питается подземными источниками, что обеспечивает высокую прозрачность воды. Летом вода прогревается до средней температуры для купания, а зимой озеро замерзает, создавая идеальные условия для подледной рыбалки.</p>
+            </div>
+            <div class="lake-stats">
+                <h3 class="stats-title">Характеристики</h3>
+                <div class="stat-item">
+                    <span class="stat-name">Площадь</span>
+                    <span class="stat-value">7,7 км²</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-name">Глубина</span>
+                    <span class="stat-value">28 м</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-name">Высота над уровнем моря</span>
+                    <span class="stat-value">438 м</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-name">Длина</span>
+                    <span class="stat-value">4,1 км</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-name">Ширина</span>
+                    <span class="stat-value">2,9 км</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-name">Температура летом</span>
+                    <span class="stat-value">до +24°C</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery Section -->
+        <div class="lake-gallery">
+            <h2 class="gallery-title">Галерея</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="Банное.jpg" alt="Озеро Банное">
+                </div>
+                <div class="gallery-item">
+                    <img src="Берег Банное.jpg" alt="Берег озера">
+                </div>
+                <div class="gallery-item">
+                    <img src="Горы у Банного.jpg" alt="Горы вокруг озера">
+                </div>
+            </div>
+        </div>
+
+        <!-- Activities Section -->
+        <div class="activities">
+            <h2 class="activities-title">Чем заняться</h2>
+            <div class="activities-grid">
+                <div class="activity-card">
+                    <div class="activity-icon">
+                        <i class="fas fa-swimmer"></i>
+                    </div>
+                    <h3>Купание</h3>
+                    <p>Чистая вода и пологие берега делают озеро идеальным для купания в летние месяцы.</p>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-icon">
+                        <i class="fas fa-fish"></i>
+                    </div>
+                    <h3>Рыбалка</h3>
+                    <p>Богатая ихтиофауна: сиг, чудской рипус, пелядь, окунь, щука и другие виды рыб.</p>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-icon">
+                        <i class="fas fa-hiking"></i>
+                    </div>
+                    <h3>Пешие прогулки</h3>
+                    <p>Живописные тропы вокруг озера и подъем на окружающие горы с панорамными видами.</p>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-icon">
+                        <i class="fas fa-skiing"></i>
+                    </div>
+                    <h3>Горнолыжный спорт</h3>
+                    <p>Рядом расположен горнолыжный курорт "Мраткино" с трассами различной сложности.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Location Section -->
+        <div class="location">
+            <h2 class="location-title">Как добраться</h2>
+            <div class="location-content">
+                <div class="location-info">
+                    <p>Озеро Банное расположено в 45 км северо-восточнее города Белорецк, на границе Башкортостана и Челябинской области.</p>
+                    <p><strong>На автомобиле:</strong> Из Уфы по трассе М5 до поворота на Белорецк, затем по дороге до указателя на озеро Банное. Общее расстояние - около 300 км.</p>
+                    <p><strong>Общественным транспортом:</strong> Автобусом до города Белорецк, затем местным транспортом или такси до озера.</p>
+                    <p>На берегу озера расположены базы отдыха, гостиницы и кемпинги для комфортного размещения туристов.</p>
+                </div>
+                <div class="location-map">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2188.5766353906!2d58.62753337688701!3d53.596667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x43e7b95c14b8b5a5%3A0x7b8c0b9c5b0b0b0b!2z0J7QutC-0L3QutC1!5e0!3m2!1sru!2sru!4v1690000000000!5m2!1sru!2sru" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="copyright">
+            <p>&copy; 2025 Туристический портал по Башкортостану. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
