@@ -2,10 +2,9 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Лучшие туристические места и озера Башкортостана</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="favicon.png">
     <style>
         * {
             margin: 0;
@@ -28,362 +27,437 @@
             overflow-x: hidden;
         }
 
-        /* ... остальные стили без изменений ... */
-
-        /* Gallery Modal Styles - ОБНОВЛЕННЫЕ */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            animation: fadeIn 0.3s ease;
-            overflow: hidden;
-            cursor: grab;
+        ::selection {
+            background-color: #4a7c59;
+            color: rgb(255, 248, 237);
         }
 
-        .modal.modal-grabbing {
-            cursor: grabbing;
-        }
-
-        .modal-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.1s ease;
-        }
-
-        .modal-content {
-            position: relative;
-            display: block;
-            max-width: 90%;
-            max-height: 90vh;
-            transition: transform 0.3s ease;
-            transform-origin: center center;
-        }
-
-        .modal-image {
-            width: 100%;
-            height: auto;
-            max-height: 80vh;
-            object-fit: contain;
-            border-radius: 10px;
-            user-select: none;
-            -webkit-user-drag: none;
-        }
-
-        .close {
-            position: fixed;
-            top: 20px;
-            right: 35px;
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            font-size: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            z-index: 2001;
-            background: rgba(0, 0, 0, 0.5);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .close:hover {
-            color: var(--accent);
-            transform: scale(1.1);
-            background: rgba(0, 0, 0, 0.7);
-        }
-
-        .modal-controls {
+            padding: 1rem 2rem;
             position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 20px;
-            z-index: 2001;
-        }
-
-        .modal-btn {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
+            width: 100%;
+            z-index: 1000;
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(7px);
         }
 
-        .modal-btn:hover {
+        .header-scrolled {
+            padding: 0.5rem 2rem;
+            background: rgba(44, 85, 48, 0.856);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('Фон.jpg') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 0 2rem;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
             background-color: var(--accent);
             color: var(--dark);
-            transform: translateY(-2px);
-        }
-
-        .modal-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .modal-btn:disabled:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-
-        .image-counter {
-            position: fixed;
-            top: 20px;
-            left: 35px;
-            color: white;
-            font-size: 18px;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
             font-weight: 600;
-            z-index: 2001;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 8px 16px;
+            transition: all 0.3s ease;
+            border: 2px solid var(--accent);
+        }
+
+        .btn:hover {
+            background-color: transparent;
+            color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Sections */
+        section {
+            padding: 5rem 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent);
+            border-radius: 2px;
+        }
+
+        /* About */
+        .about {
+            background-color: white;
+        }
+
+        .about-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .about-text p {
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+
+        .about-image {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            transform: rotate(2deg);
+            transition: all 0.5s ease;
+        }
+
+        .about-image:hover {
+            transform: rotate(0deg) scale(1.03);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .about-image:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Lakes */
+        .lakes {
+            background-color: #f0f7f1;
+        }
+
+        .lakes-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .lake-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .lake-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .lake-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .lake-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .lake-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .lake-card:hover .lake-image img {
+            transform: scale(1.1);
+        }
+
+        .lake-content {
+            padding: 1.5rem;
+        }
+
+        .lake-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .lake-content p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .lake-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature {
+            background-color: var(--light);
+            color: var(--secondary);
+            padding: 0.3rem 0.8rem;
             border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Mounts */
+        .mounts {
+            background-color: white;
+        }
+
+        .mounts-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Places */
+        .places {
+            background-color: #f0f7f1;
+        }
+
+        .places-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .places-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .place-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .place-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .place-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .place-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .place-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .place-card:hover .place-image img {
+            transform: scale(1.1);
+        }
+
+        .place-content {
+            padding: 1.5rem;
+        }
+
+        .place-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .place-content p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Gallery */
+        .gallery {
+            background-color: #f0f7f1;
+        }
+
+        .gallery-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
         }
 
         .gallery-item {
-            cursor: pointer;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 250px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
+            opacity: 0;
+            transform: scale(0.9);
+            cursor: pointer;
+        }
+
+        .gallery-item.visible {
+            opacity: 1;
+            transform: scale(1);
         }
 
         .gallery-item:hover {
             transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
 
-        /* Zoom controls */
-        .zoom-controls {
-            position: fixed;
-            right: 35px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 2001;
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
         }
 
-        .zoom-btn {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 20px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .zoom-btn:hover {
-            background-color: var(--accent);
-            color: var(--dark);
+        .gallery-item:hover img {
             transform: scale(1.1);
         }
 
-        .zoom-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .zoom-btn:disabled:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
             color: white;
+            padding: 1rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
         }
 
-        /* Zoom level indicator */
-        .zoom-level {
-            position: fixed;
-            bottom: 30px;
-            right: 35px;
-            color: white;
-            font-size: 14px;
-            font-weight: 600;
-            z-index: 2001;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 8px 12px;
-            border-radius: 20px;
-            display: none;
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
         }
 
-        .zoom-level.show {
-            display: block;
-        }
-
-        /* Drag instruction */
-        .drag-hint {
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 14px;
-            z-index: 2001;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 8px 16px;
-            border-radius: 20px;
-            display: none;
-            animation: pulse 2s infinite;
-        }
-
-        .drag-hint.show {
-            display: block;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes zoomIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; }
-        }
-
-        /* Responsive design for modal */
-        @media (max-width: 768px) {
-            .modal-content {
-                max-width: 95%;
-            }
-
-            .close {
-                top: 10px;
-                right: 20px;
-                font-size: 30px;
-                width: 40px;
-                height: 40px;
-            }
-
-            .image-counter {
-                top: 15px;
-                left: 20px;
-                font-size: 16px;
-                padding: 6px 12px;
-            }
-
-            .zoom-controls {
-                right: 20px;
-                gap: 10px;
-            }
-
-            .zoom-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 16px;
-            }
-
-            .modal-controls {
-                bottom: 20px;
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .modal-btn {
-                padding: 10px 16px;
-                font-size: 14px;
-            }
-
-            .zoom-level {
-                bottom: 20px;
-                right: 20px;
-                font-size: 12px;
-            }
-
-            .drag-hint {
-                bottom: 70px;
-                font-size: 12px;
-            }
-        }
-
-        :root {
-            --primary: #2c5530;
-            --secondary: #4a7c59;
-            --accent: #8fb996;
-            --light: #f5f9f6;
-            --dark: #1a1f1b;
-        }
-
-        body {
-            background-color: var(--light);
-            color: var(--dark);
-            overflow-x: hidden;
-        }
-
-        ::selection {
-            background-color: #4a7c59;
-            color:rgb(255, 248, 237)
-        }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        :root {
-            --primary: #2c5530;
-            --secondary: #4a7c59;
-            --accent: #8fb996;
-            --light: #f5f9f6;
-            --dark: #1a1f1b;
-        }
-
-        body {
-            background-color: var(--light);
-            color: var(--dark);
-            overflow-x: hidden;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        :root {
-            --primary: #2c5530;
-            --secondary: #4a7c59;
-            --accent: #8fb996;
-            --light: #f5f9f6;
-            --dark: #1a1f1b;
-        }
-
-        body {
-            background-color: var(--light);
-            color: var(--dark);
-            overflow-x: hidden;
-        }
-
-        /* Gallery Modal Styles */
+        /* Modal (галерея) */
         .modal {
             display: none;
             position: fixed;
@@ -472,32 +546,6 @@
             z-index: 2001;
         }
 
-        .gallery-item {
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .gallery-item:hover {
-            transform: scale(1.05);
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes zoomIn {
-            from { transform: translateY(-50%) scale(0.8); opacity: 0; }
-            to { transform: translateY(-50%) scale(1); opacity: 1; }
-        }
-
-        @keyframes zoomOut {
-            from { transform: translateY(-50%) scale(1); opacity: 1; }
-            to { transform: translateY(-50%) scale(0.8); opacity: 0; }
-        }
-
-        /* Zoom controls */
         .zoom-controls {
             position: absolute;
             right: 35px;
@@ -521,9 +569,6 @@
             font-weight: bold;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .zoom-btn:hover {
@@ -532,536 +577,7 @@
             transform: scale(1.1);
         }
 
-        /* Responsive design for modal */
-        @media (max-width: 768px) {
-            .modal-content {
-                width: 95%;
-            }
-
-            .close {
-                top: 10px;
-                right: 20px;
-                font-size: 30px;
-            }
-
-            .image-counter {
-                top: 15px;
-                left: 20px;
-                font-size: 16px;
-            }
-
-            .zoom-controls {
-                right: 20px;
-                gap: 10px;
-            }
-
-            .zoom-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 16px;
-            }
-
-            .modal-controls {
-                bottom: 20px;
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .modal-btn {
-                padding: 10px 16px;
-                font-size: 14px;
-            }
-        }
-
-        /* Header Styles */
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 1rem 2rem;
-            position: fixed;
-            width: 100%;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(7px);
-        }
-
-        .header-scrolled {
-            padding: 0.5rem 2rem;
-            background: rgba(44, 85, 48, 0.856);
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-        }
-
-        .logo i {
-            margin-right: 10px;
-            color: var(--accent);
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-
-        .nav-links li {
-            margin-left: 2rem;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent);
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--accent);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .mobile-menu {
-            display: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-                        url('Фон.jpg') no-repeat center center/cover;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            padding: 0 2rem;
-        }
-
-        .hero-content {
-            max-width: 800px;
-            animation: fadeInUp 1s ease;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            line-height: 1.6;
-        }
-
-        .btn {
-            display: inline-block;
-            background-color: var(--accent);
-            color: var(--dark);
-            padding: 0.8rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: 2px solid var(--accent);
-        }
-
-        .btn:hover {
-            background-color: transparent;
-            color: var(--accent);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Section Styles */
-        section {
-            padding: 5rem 2rem;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-            position: relative;
-        }
-
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: var(--primary);
-            display: inline-block;
-        }
-
-        .section-title h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background-color: var(--accent);
-            border-radius: 2px;
-        }
-
-        /* About Section */
-        .about {
-            background-color: white;
-        }
-
-        .about-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        .about-text h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            color: var(--primary);
-        }
-
-        .about-text p {
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
-            color: #555;
-        }
-
-        .about-image {
-            position: relative;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-            transform: rotate(2deg);
-            transition: all 0.5s ease;
-        }
-
-        .about-image:hover {
-            transform: rotate(0deg) scale(1.03);
-        }
-
-        .about-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-            transition: transform 0.5s ease;
-        }
-
-        .about-image:hover img {
-            transform: scale(1.1);
-        }
-
-        /* Lakes Section */
-        .lakes {
-            background-color: #f0f7f1;
-        }
-
-        .lakes-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .lake-card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .lake-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .lake-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .lake-image {
-            height: 200px;
-            overflow: hidden;
-        }
-
-        .lake-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .lake-card:hover .lake-image img {
-            transform: scale(1.1);
-        }
-
-        .lake-content {
-            padding: 1.5rem;
-        }
-
-        .lake-content h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--primary);
-        }
-
-        .lake-content p {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-
-        .lake-features {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-/* Mounts Section */
-        .mounts {
-            background-color: white;
-        }
-
-        .mounts-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .mount-card {
-            background: rgb(255, 0, 0);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .mount-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .mount-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .mount-image {
-            height: 200px;
-            overflow: hidden;
-        }
-
-        .mount-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .mount-card:hover .lake-image img {
-            transform: scale(1.1);
-        }
-
-        .mount-content {
-            padding: 1.5rem;
-        }
-
-        .mount-content h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--primary);
-        }
-
-        .mount-content p {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-
-        .mount-features {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-
-        .feature {
-            background-color: var(--light);
-            color: var(--secondary);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        /* Places Section */
-        .places {
-            background-color: #f0f7f1;
-        }
-
-        .places-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .places-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .place-card {
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .place-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .place-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .place-image {
-            height: 200px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .place-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .place-card:hover .place-image img {
-            transform: scale(1.1);
-        }
-
-        .place-content {
-            padding: 1.5rem;
-        }
-
-        .place-content h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--primary);
-        }
-
-        .place-content p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        /* Gallery Section */
-        .gallery {
-            background-color: #f0f7f1;
-        }
-
-        .gallery-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-        }
-
-        .gallery-item {
-            border-radius: 10px;
-            overflow: hidden;
-            height: 250px;
-            position: relative;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            opacity: 0;
-            transform: scale(0.9);
-        }
-
-        .gallery-item.visible {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .gallery-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .gallery-item:hover img {
-            transform: scale(1.1);
-        }
-
-        .gallery-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-            color: white;
-            padding: 1rem;
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
-        }
-
-        .gallery-item:hover .gallery-overlay {
-            transform: translateY(0);
-        }
-
-        /* Contact Section */
+        /* Contact */
         .contact {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
@@ -1195,35 +711,189 @@
             font-size: 0.9rem;
         }
 
-        /* Animations */
+        .TExt {
+            color: #dcdcdc7e;
+        }
+
+        /* Notification Modal */
+        .notification-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        .notification-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .notification-content {
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
+            border-radius: 32px;
+            padding: 2rem;
+            max-width: 620px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 35px 68px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(143, 185, 150, 0.3) inset;
+            transform: translateY(40px) scale(0.96);
+            transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            text-align: center;
+        }
+
+        .notification-modal.show .notification-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .notification-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            background: rgba(44, 85, 48, 0.1);
+            border: none;
+            font-size: 1.7rem;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+        }
+
+        .notification-close:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .notification-icon i {
+            font-size: 4rem;
+            background: linear-gradient(135deg, #2c5530, #7fa885);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .notification-content h3 {
+            font-size: 1.65rem;
+            font-weight: 700;
+            color: #1a3a2a;
+            margin-bottom: 0.75rem;
+        }
+
+        .notification-message {
+            font-size: 1.05rem;
+            color: #2e3e2f;
+            background: rgba(143, 185, 150, 0.18);
+            padding: 1rem;
+            border-radius: 24px;
+            border-left: 4px solid var(--accent);
+            text-align: left;
+        }
+
+        .contest-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(143, 185, 150, 0.25);
+            padding: 6px 14px;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 1rem;
+        }
+
+        /* Анимации */
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        /* Responsive Design */
-        @media (max-width: 992px) {
+        @keyframes zoomIn {
+            from { transform: translateY(-50%) scale(0.8); opacity: 0; }
+            to { transform: translateY(-50%) scale(1); opacity: 1; }
+        }
+
+        /* Мобильная версия для узких экранов (соотношение сторон уже 9:16) */
+        @media (max-aspect-ratio: 9/16) {
+            .navbar {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            .logo {
+                font-size: 1.4rem;
+            }
+            .nav-links li {
+                margin-left: 1rem;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .hero p {
+                font-size: 1rem;
+            }
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
             .about-content {
                 grid-template-columns: 1fr;
             }
-
             .about-image {
                 order: -1;
+            }
+            .lakes-container,
+            .mounts-container,
+            .places-grid {
+                grid-template-columns: 1fr;
+            }
+            .gallery-container {
+                grid-template-columns: 1fr 1fr;
+            }
+            .gallery-item {
+                height: 180px;
+            }
+            .modal-controls {
+                bottom: 15px;
+                gap: 10px;
+            }
+            .modal-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            .zoom-controls {
+                right: 15px;
+                gap: 8px;
+            }
+            .zoom-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+            .close {
+                top: 10px;
+                right: 20px;
+                font-size: 30px;
+            }
+            .image-counter {
+                top: 15px;
+                left: 20px;
+                font-size: 14px;
             }
         }
 
@@ -1232,163 +902,34 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
-
             .nav-links {
                 flex-direction: column;
                 width: 100%;
                 margin-top: 1rem;
                 display: none;
             }
-
             .nav-links.active {
                 display: flex;
             }
-
             .nav-links li {
                 margin: 0.5rem 0;
             }
-
             .mobile-menu {
                 display: block;
                 position: absolute;
                 top: 1rem;
                 right: 2rem;
             }
-
             .hero h1 {
                 font-size: 2.5rem;
             }
-
             section {
                 padding: 3rem 1rem;
             }
         }
-        .TExt {
-            color:#dcdcdc7e;
-        }
-        /* Notification Modal Styles */
-.notification-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(5px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-}
-
-.notification-modal.show {
-    opacity: 1;
-    visibility: visible;
-}
-
-.notification-content {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 2.5rem;
-    max-width: 500px;
-    width: 90%;
-    position: relative;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    transform: translateY(30px);
-    transition: transform 0.4s ease;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.notification-modal.show .notification-content {
-    transform: translateY(0);
-}
-
-.notification-close {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    background: none;
-    border: none;
-    font-size: 2rem;
-    color: var(--primary);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    line-height: 1;
-    padding: 0;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-}
-
-.notification-close:hover {
-    color: var(--secondary);
-    background-color: rgba(44, 85, 48, 0.1);
-    transform: rotate(90deg);
-}
-
-.notification-icon {
-    text-align: center;
-    margin-bottom: 1.5rem;
-}
-
-.notification-icon i {
-    font-size: 3.5rem;
-    color: var(--primary);
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.notification-content h3 {
-    text-align: center;
-    color: var(--primary);
-    margin-bottom: 1rem;
-    font-size: 1.8rem;
-}
-
-.notification-content p {
-    text-align: center;
-    color: #555;
-    line-height: 1.6;
-    margin-bottom: 1rem;
-}
-
-.notification-tip {
-    background-color: rgba(143, 185, 150, 0.2);
-    padding: 1rem;
-    border-radius: 10px;
-    margin-top: 1.5rem;
-    border-left: 4px solid var(--accent);
-}
-
-.notification-tip i {
-    color: var(--secondary);
-    margin-right: 8px;
-}
-
-/* Animation for modal */
-@keyframes slideInUp {
-    from {
-        transform: translateY(50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header id="header">
         <nav class="navbar">
             <div class="logo">
@@ -1409,7 +950,6 @@
         </nav>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-content">
             <h1>Откройте для себя красоту Башкортостана</h1>
@@ -1418,7 +958,6 @@
         </div>
     </section>
 
-    <!-- About Section -->
     <section class="about" id="about">
         <div class="section-title">
             <h2>О Башкортостане</h2>
@@ -1436,12 +975,12 @@
         </div>
     </section>
 
-    <!-- Lakes Section -->
     <section class="lakes" id="lakes">
         <div class="section-title">
-            <h2>Жемчужичны озерного края</h2>
+            <h2>Жемчужины озёрного края</h2>
         </div>
         <div class="lakes-container">
+            <!-- Озеро Банное -->
             <div class="lake-card">
                 <div class="lake-image">
                     <img src="к Банное.webp" alt="Озеро Банное">
@@ -1452,30 +991,30 @@
                     <div class="lake-features">
                         <span class="feature">Площадь: 36.3 км²</span>
                         <span class="feature">Глубина: 28 м</span>
-                        <span class="feature">Юго-Восток</span>
                         <span class="feature">Рыбалка</span>
                         <span class="feature">Кемпинг</span>
                     </div>
                     <a href="bannoe.html" class="btn">Узнать больше</a>
                 </div>
             </div>
+            <!-- Озеро Аслыкуль -->
             <div class="lake-card">
                 <div class="lake-image">
                     <img src="к Аслыкуль.jpg" alt="Озеро Аслыкуль">
                 </div>
                 <div class="lake-content">
                     <h3>Озеро Аслыкуль</h3>
-                    <p>Крупнейшее озеро республики, часто называемое "Башкирским морем". Мелкое, с песчанным дном. Идеальное место для купания.</p>
+                    <p>Крупнейшее озеро республики, часто называемое "Башкирским морем". Мелкое, с песчаным дном. Идеальное место для купания.</p>
                     <div class="lake-features">
                         <span class="feature">Площадь: 23.5 км²</span>
                         <span class="feature">Глубина: 9 м</span>
-                        <span class="feature">Запад</span>
                         <span class="feature">Птицы</span>
                         <span class="feature">Пляжи</span>
                     </div>
                     <a href="aslukul.html" class="btn">Узнать больше</a>
                 </div>
             </div>
+            <!-- Озеро Кандрыкуль -->
             <div class="lake-card">
                 <div class="lake-image">
                     <img src="к Кандрыкуль.jpeg" alt="Озеро Кандрыкуль">
@@ -1486,15 +1025,32 @@
                     <div class="lake-features">
                         <span class="feature">Площадь: 15.6 км²</span>
                         <span class="feature">Глубина: 16 м</span>
-                        <span class="feature">Запад</span>
                         <span class="feature">Кемпинг</span>
                         <span class="feature">Водные виды</span>
                     </div>
                     <a href="kandrukul.html" class="btn">Узнать больше</a>
                 </div>
             </div>
+            <!-- Голубое озеро (Зянгяр-куль) -->
+            <div class="lake-card">
+                <div class="lake-image">
+                    <img src="Зянгяркуль фон.jpg" alt="Голубое озеро">
+                </div>
+                <div class="lake-content">
+                    <h3>Голубое озеро (Зянгяр-куль)</h3>
+                    <p>Уникальный карстовый водоём с бирюзовой водой, расположенный всего в 60 км от Уфы.</p>
+                    <div class="lake-features">
+                        <span class="feature">Площадь: 0.03 км²</span>
+                        <span class="feature">Глубина: 13 м</span>
+                        <span class="feature">Дайвинг</span>
+                        <span class="feature">Экотропы</span>
+                    </div>
+                    <a href="zyangyar-kul.html" class="btn">Узнать больше</a>
+                </div>
+            </div>
         </div>
     </section>
+
     <section class="mounts" id="mounts">
         <div class="section-title">
             <h2>Великие Вершины Республики</h2>
@@ -1502,11 +1058,11 @@
         <div class="mounts-container">
             <div class="lake-card">
                 <div class="lake-image">
-                    <img src="Ямантау.jpg" alt="Озеро Банное">
+                    <img src="Ямантау.jpg" alt="Ямантау">
                 </div>
                 <div class="lake-content">
                     <h3>Ямантау</h3>
-                    <p>Самая высокая гора в Башкортостане. Расположенна у закрытого города Межгорье, поэтому обычным туристам попасть на неё врятли получится.</p>
+                    <p>Самая высокая гора в Башкортостане. Расположена у закрытого города Межгорье, поэтому обычным туристам попасть на неё вряд ли получится.</p>
                     <div class="lake-features">
                         <span class="feature">Высота: 1640 м</span>
                     </div>
@@ -1515,7 +1071,7 @@
             </div>
             <div class="lake-card">
                 <div class="lake-image">
-                    <img src="Иремель.jpg" alt="Озеро Аслыкуль">
+                    <img src="Иремель.jpg" alt="Иремель">
                 </div>
                 <div class="lake-content">
                     <h3>Иремель</h3>
@@ -1528,7 +1084,7 @@
             </div>
             <div class="lake-card">
                 <div class="lake-image">
-                    <img src="Малый Ямантау.jpg" alt="Озеро Кандрыкуль">
+                    <img src="Малый Ямантау.jpg" alt="Малый Ямантау">
                 </div>
                 <div class="lake-content">
                     <h3>Малый Ямантау</h3>
@@ -1542,7 +1098,6 @@
         </div>
     </section>
 
-    <!-- Places Section -->
     <section class="places" id="places">
         <div class="section-title">
             <h2>Знаменитые места</h2>
@@ -1580,7 +1135,6 @@
         </div>
     </section>
 
-    <!-- Gallery Section -->
     <section class="gallery" id="gallery">
         <div class="section-title">
             <h2>Галерея красот</h2>
@@ -1612,34 +1166,27 @@
             </div>
         </div>
         <div id="galleryModal" class="modal">
-        <span class="close">&times;</span>
-        <div class="image-counter">
-            <span id="currentImage">1</span> / <span id="totalImages">6</span>
-        </div>
-        <div class="zoom-level" id="zoomLevel">100%</div>
-        <div class="drag-hint" id="dragHint">🖱️ Перетаскивайте фото для просмотра</div>
-        <div class="modal-container" id="modalContainer">
-            <div class="modal-content">
-                <img class="modal-image" id="modalImage" src="" alt="">
+            <span class="close">&times;</span>
+            <div class="image-counter">
+                <span id="currentImage">1</span> / <span id="totalImages">6</span>
+            </div>
+            <div class="modal-container">
+                <div class="modal-content">
+                    <img class="modal-image" id="modalImage" src="" alt="">
+                </div>
+            </div>
+            <div class="zoom-controls">
+                <button class="zoom-btn" id="zoomIn">+</button>
+                <button class="zoom-btn" id="zoomOut">-</button>
+                <button class="zoom-btn" id="resetZoom">⟳</button>
+            </div>
+            <div class="modal-controls">
+                <button class="modal-btn" id="prevBtn"><i class="fas fa-chevron-left"></i> Назад</button>
+                <button class="modal-btn" id="nextBtn">Вперед <i class="fas fa-chevron-right"></i></button>
             </div>
         </div>
-        <div class="zoom-controls">
-            <button class="zoom-btn" id="zoomIn">+</button>
-            <button class="zoom-btn" id="zoomOut">-</button>
-            <button class="zoom-btn" id="resetZoom">⟳</button>
-        </div>
-        <div class="modal-controls">
-            <button class="modal-btn" id="prevBtn">
-                <i class="fas fa-chevron-left"></i> Назад
-            </button>
-            <button class="modal-btn" id="nextBtn">
-                Вперед <i class="fas fa-chevron-right"></i>
-            </button>
-        </div>
-    </div>
     </section>
 
-    <!-- Contact Section -->
     <section class="contact" id="contact">
         <div class="section-title">
             <h2>Свяжитесь с нами</h2>
@@ -1662,18 +1209,11 @@
         </form>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="footer-content">
             <div class="footer-column">
                 <h3>О нас</h3>
                 <p>Мы помогаем туристам открывать красоты Башкортостана уже более 10 лет*. Наша цель — показать уникальную природу этого удивительного региона.</p>
-                <!-- <div class="social-links">
-                    <a href="#"><i class="fab fa-vk"></i></a>
-                    <a href="#"><i class="fab fa-telegram"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
-                </div> -->
             </div>
             <div class="footer-column">
                 <h3>Об авторе</h3>
@@ -1681,8 +1221,6 @@
                 <div class="social-links">
                     <a href="https://vk.com/zweltov"><i class="fab fa-vk"></i></a>
                     <a href="https://t.me/Zweltov"><i class="fab fa-telegram"></i></a>
-                    <!-- <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a> -->
                 </div>
             </div>
             <div class="footer-column">
@@ -1703,8 +1241,8 @@
                     <li><a href="https://ru.wikipedia.org/wiki/%D0%98%D1%80%D0%B5%D0%BC%D0%B5%D0%BB%D1%8C">Гора Иремель</a></li>
                     <li><a href="https://ru.wikipedia.org/wiki/%D0%9A%D0%B0%D0%BF%D0%BE%D0%B2%D0%B0_%D0%BF%D0%B5%D1%89%D0%B5%D1%80%D0%B0">Капова пещера</a></li>
                     <li><a href="aslukul.html">Озеро Аслыкуль</a></li>
+                    <li><a href="zyangyar-kul.html">Голубое озеро</a></li>
                     <li><a href="https://ru.wikipedia.org/wiki/%D0%91%D0%B0%D1%88%D0%BA%D0%B8%D1%80%D0%B8%D1%8F_(%D0%BD%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D0%BF%D0%B0%D1%80%D0%BA)">Национальный парк</a></li>
-                    <li><a href="https://ru.wikipedia.org/wiki/%D0%91%D0%B5%D0%BB%D0%B0%D1%8F_(%D0%BF%D1%80%D0%B8%D1%82%D0%BE%D0%BA_%D0%9A%D0%B0%D0%BC%D1%8B)">Река Белая</a></li>
                 </ul>
             </div>
             <div class="footer-column">
@@ -1718,50 +1256,30 @@
             <p>*Не 10 лет, а более 1 дня.    | &copy;2026 Туристический портал Башкортостана. Все права защищены.</p>
         </div>
     </footer>
-    <!-- Notification Modal -->
-<div class="notification-modal" id="notificationModal">
-    <div class="notification-content">
-        <button class="notification-close" id="closeNotification">&times;</button>
-        <div class="notification-icon">
-            <i class="fas fa-map-marked-alt"></i>
-        </div>
-        <h3>Приветствуем членов жюри "КРИТ-2026"!</h3>
-        <!-- <p></p> -->
-    </div>
-</div>
 
-<script>
-    // Notification Modal
-    document.addEventListener('DOMContentLoaded', function() {
-        const notificationModal = document.getElementById('notificationModal');
-        const closeNotification = document.getElementById('closeNotification');
-        
-        // Show notification after 3 seconds
-        setTimeout(() => {
-            notificationModal.classList.add('show');
-        }, 3000);
-        
-        // Close notification on button click
-        closeNotification.addEventListener('click', () => {
-            notificationModal.classList.remove('show');
-        });
-        
-        // Close notification when clicking outside content
-        notificationModal.addEventListener('click', (e) => {
-            if (e.target === notificationModal) {
-                notificationModal.classList.remove('show');
-            }
-        });
-    });
-</script>
+    <div class="notification-modal" id="notificationModal">
+        <div class="notification-content">
+            <button class="notification-close" id="closeNotification">&times;</button>
+            <div class="notification-icon">
+                <i class="fas fa-award"></i>
+            </div>
+            <h3>Приветствуем членов жюри</h3>
+            <div class="notification-message">
+                <p><strong>Республиканского этапа Всероссийского конкурса медиатворчества и программирования среди учащихся "24 bit"</strong></p>
+            </div>
+            <div class="contest-badge">
+                <i class="fas fa-laptop-code"></i> Работа участника: цифровой гид по Башкортостану
+            </div>
+        </div>
+    </div>
 
     <script>
-    
+        // Мобильное меню
         document.querySelector('.mobile-menu').addEventListener('click', function() {
             document.querySelector('.nav-links').classList.toggle('active');
         });
 
-        // Header scroll effect
+        // Эффект скролла хедера
         window.addEventListener('scroll', function() {
             const header = document.getElementById('header');
             if (window.scrollY > 50) {
@@ -1771,48 +1289,38 @@
             }
         });
 
-        // Smooth scrolling for anchor links
+        // Плавная прокрутка
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                
                 const targetId = this.getAttribute('href');
                 if (targetId === '#') return;
-                
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
                     window.scrollTo({
                         top: targetElement.offsetTop - 80,
                         behavior: 'smooth'
                     });
-                    
-                    // Close mobile menu if open
                     document.querySelector('.nav-links').classList.remove('active');
                 }
             });
         });
 
-        // Animation on scroll
+        // Анимация появления
         function checkVisibility() {
             const cards = document.querySelectorAll('.lake-card, .place-card, .gallery-item');
-            
             cards.forEach(card => {
                 const cardTop = card.getBoundingClientRect().top;
                 const windowHeight = window.innerHeight;
-                
                 if (cardTop < windowHeight - 100) {
                     card.classList.add('visible');
                 }
             });
         }
-
-        // Initial check
         checkVisibility();
-
-        // Check on scroll
         window.addEventListener('scroll', checkVisibility);
 
-        // Gallery Modal Functionality
+        // Модальное окно галереи
         const modal = document.getElementById('galleryModal');
         const modalImage = document.getElementById('modalImage');
         const currentImageSpan = document.getElementById('currentImage');
@@ -1824,212 +1332,49 @@
         const zoomOutBtn = document.getElementById('zoomOut');
         const resetZoomBtn = document.getElementById('resetZoom');
 
-        const galleryImages = [
-            
-
-
-
-            'Хребты.jpg',
-            'Т Леса.jpg',
-            'Водопад.jpg',
-            'Осень.jpg',
-            'Природа 1.jpg',
-            'Природа 2.jpg'
-        ];
-
-        const imageTitles = [
-            'Горные хребты Башкортостана',
-            'Таежные леса Южного Урала',
-            'Водопады Башкирии',
-            'Осенние краски природы',
-            'Озеро Банное (Яктыкуль)',
-            'Озеро Аслыкуль'
-        ];
-
+        const galleryImages = ['Хребты.jpg','Т Леса.jpg','Водопад.jpg','Осень.jpg','Природа 1.jpg','Природа 2.jpg'];
         let currentIndex = 0;
         let scale = 1;
 
-        // Initialize total images count
         totalImagesSpan.textContent = galleryImages.length;
-
-        // Open modal on image click
         document.querySelectorAll('.gallery-item').forEach((item, index) => {
             item.addEventListener('click', () => {
                 currentIndex = index;
                 openModal();
             });
         });
-
-        function openModal() {
-            modal.style.display = 'block';
-            updateModalImage();
-            document.body.style.overflow = 'hidden'; // Prevent scrolling
-        }
-
-        function closeModal() {
-            modal.style.display = 'none';
-            resetZoom();
-            document.body.style.overflow = 'auto'; // Enable scrolling
-        }
-
-        function updateModalImage() {
-            modalImage.src = galleryImages[currentIndex];
-            modalImage.alt = imageTitles[currentIndex];
-            currentImageSpan.textContent = currentIndex + 1;
-            resetZoom();
-        }
-
-        function nextImage() {
-            currentIndex = (currentIndex + 1) % galleryImages.length;
-            updateModalImage();
-        }
-
-        function prevImage() {
-            currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
-            updateModalImage();
-        }
-
-        function zoomIn() {
-            scale = Math.min(scale + 0.2, 3);
-            modalImage.style.transform = `scale(${scale})`;
-        }
-
-        function zoomOut() {
-            scale = Math.max(scale - 0.2, 0.5);
-            modalImage.style.transform = `scale(${scale})`;
-        }
-
-        function resetZoom() {
-            scale = 1;
-            modalImage.style.transform = `scale(${scale})`;
-        }
-
-        // Event listeners
-        closeBtn.addEventListener('click', closeModal);
+        function openModal() { modal.style.display = 'block'; updateModalImage(); document.body.style.overflow = 'hidden'; }
+        function closeModalFunc() { modal.style.display = 'none'; resetZoom(); document.body.style.overflow = 'auto'; }
+        function updateModalImage() { modalImage.src = galleryImages[currentIndex]; currentImageSpan.textContent = currentIndex + 1; resetZoom(); }
+        function nextImage() { currentIndex = (currentIndex + 1) % galleryImages.length; updateModalImage(); }
+        function prevImage() { currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length; updateModalImage(); }
+        function zoomIn() { scale = Math.min(scale + 0.2, 3); modalImage.style.transform = `scale(${scale})`; }
+        function zoomOut() { scale = Math.max(scale - 0.2, 0.5); modalImage.style.transform = `scale(${scale})`; }
+        function resetZoom() { scale = 1; modalImage.style.transform = 'scale(1)'; }
+        closeBtn.addEventListener('click', closeModalFunc);
         prevBtn.addEventListener('click', prevImage);
         nextBtn.addEventListener('click', nextImage);
         zoomInBtn.addEventListener('click', zoomIn);
         zoomOutBtn.addEventListener('click', zoomOut);
         resetZoomBtn.addEventListener('click', resetZoom);
-
-        // Close modal when clicking outside the image
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModal();
-            }
-        });
-
-        // Keyboard navigation
+        modal.addEventListener('click', (e) => { if(e.target === modal) closeModalFunc(); });
         document.addEventListener('keydown', (e) => {
             if (modal.style.display === 'block') {
-                switch(e.key) {
-                    case 'Escape':
-                        closeModal();
-                        break;
-                    case 'ArrowLeft':
-                        prevImage();
-                        break;
-                    case 'ArrowRight':
-                        nextImage();
-                        break;
-                    case '+':
-                    case '=':
-                        zoomIn();
-                        break;
-                    case '-':
-                        zoomOut();
-                        break;
-                    case '0':
-                        resetZoom();
-                        break;
-                }
+                if(e.key === 'Escape') closeModalFunc();
+                if(e.key === 'ArrowLeft') prevImage();
+                if(e.key === 'ArrowRight') nextImage();
+                if(e.key === '+' || e.key === '=') zoomIn();
+                if(e.key === '-') zoomOut();
+                if(e.key === '0') resetZoom();
             }
         });
 
-        // Touch events for mobile zoom (optional)
-        let initialDistance = null;
-
-        modalImage.addEventListener('touchstart', (e) => {
-            if (e.touches.length === 2) {
-                initialDistance = Math.hypot(
-                    e.touches[0].clientX - e.touches[1].clientX,
-                    e.touches[0].clientY - e.touches[1].clientY
-                );
-            }
-        });
-
-        modalImage.addEventListener('touchmove', (e) => {
-            if (e.touches.length === 2 && initialDistance) {
-                const currentDistance = Math.hypot(
-                    e.touches[0].clientX - e.touches[1].clientX,
-                    e.touches[0].clientY - e.touches[1].clientY
-                );
-                
-                if (currentDistance > initialDistance + 10) {
-                    zoomIn();
-                    initialDistance = currentDistance;
-                } else if (currentDistance < initialDistance - 10) {
-                    zoomOut();
-                    initialDistance = currentDistance;
-                }
-            }
-        });
-        // Mobile menu toggle
-        document.querySelector('.mobile-menu').addEventListener('click', function() {
-            document.querySelector('.nav-links').classList.toggle('active');
-        });
-
-        // Header scroll effect
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.classList.add('header-scrolled');
-            } else {
-                header.classList.remove('header-scrolled');
-            }
-        });
-
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                    
-                    // Close mobile menu if open
-                    document.querySelector('.nav-links').classList.remove('active');
-                }
-            });
-        });
-
-        // Animation on scroll
-        function checkVisibility() {
-            const cards = document.querySelectorAll('.lake-card, .place-card, .gallery-item');
-            
-            cards.forEach(card => {
-                const cardTop = card.getBoundingClientRect().top;
-                const windowHeight = window.innerHeight;
-                
-                if (cardTop < windowHeight - 100) {
-                    card.classList.add('visible');
-                }
-            });
-        }
-
-        // Initial check
-        checkVisibility();
-
-        // Check on scroll
-        window.addEventListener('scroll', checkVisibility);
-        
+        // Уведомление
+        const notificationModal = document.getElementById('notificationModal');
+        const closeNotification = document.getElementById('closeNotification');
+        setTimeout(() => notificationModal.classList.add('show'), 1200);
+        closeNotification.addEventListener('click', () => notificationModal.classList.remove('show'));
+        notificationModal.addEventListener('click', (e) => { if(e.target === notificationModal) notificationModal.classList.remove('show'); });
     </script>
 </body>
 </html>

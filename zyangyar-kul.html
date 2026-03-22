@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Голубое озеро (Зянгяр-куль) - Башкортостан</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #517b2c;
+            --secondary: #319770;
+            --accent: #569a4b;
+            --light: #f0fdfa;
+            --dark: #1a2f2f;
+        }
+
+        ::selection {
+            background-color: #319751;
+            color: #fff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(7px);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+
+        .logo a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .back-btn {
+            background-color: var(--accent);
+            color: var(--dark);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid var(--accent);
+        }
+
+        .back-btn:hover {
+            background-color: transparent;
+            color: var(--accent);
+        }
+
+        /* Hero */
+        .lake-hero {
+            height: 60vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('Зянгяркуль фон.jpg') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 0 2rem;
+            margin-top: 80px;
+        }
+
+        .lake-hero-content {
+            max-width: 800px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .lake-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .lake-hero p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        /* Lake Details */
+        .lake-details {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .lake-info h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .lake-info h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent);
+            border-radius: 2px;
+        }
+
+        .lake-info p {
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+
+        .lake-stats {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+
+        .stats-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .stat-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .stat-value {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        /* Gallery */
+        .lake-gallery {
+            margin-bottom: 3rem;
+        }
+
+        .gallery-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            border-radius: 10px;
+            overflow: hidden;
+            height: 250px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Activities */
+        .activities {
+            background-color: white;
+            padding: 3rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+        }
+
+        .activities-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .activity-card {
+            text-align: center;
+            padding: 2rem 1rem;
+            border-radius: 10px;
+            background-color: var(--light);
+            transition: all 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-icon {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .activity-card h3 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .activity-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Location */
+        .location {
+            margin-bottom: 3rem;
+        }
+
+        .location-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .location-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .location-info p {
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+
+        .location-map {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            height: 300px;
+        }
+
+        .location-map iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 2rem 1rem;
+            text-align: center;
+        }
+
+        .copyright {
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+            .location-content {
+                grid-template-columns: 1fr;
+            }
+            .lake-hero {
+                height: 50vh;
+                margin-top: 70px;
+            }
+            .lake-hero h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-mountain"></i>
+                <a href="index.html">Туризм Башкортостана</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html#lakes">Все озера</a></li>
+                <li><a href="index.html#places">Другие места</a></li>
+                <li><a href="index.html#contact">Контакты</a></li>
+                <li><a href="index.html" class="back-btn">На главную</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="lake-hero">
+        <div class="lake-hero-content">
+            <h1>Голубое озеро (Зянгяр-куль)</h1>
+            <p>Карстовое чудо с бирюзовой водой в 60 км от Уфы</p>
+        </div>
+    </section>
+
+    <section class="lake-details">
+        <div class="details-grid">
+            <div class="lake-info">
+                <h2>О озере</h2>
+                <p>Голубое озеро (башк. Зәңгәр күл) — уникальный карстовый водоём, расположенный в Уфимском районе, всего в часе езды от столицы республики. Его необычный бирюзовый цвет воды привлекает дайверов, фотографов и любителей экотуризма.</p>
+                <p>Озеро образовалось в результате провала известняковых пород и питается мощными подземными источниками. Благодаря постоянной циркуляции вода остаётся кристально чистой даже в летнюю жару, видимость под водой достигает 8–10 метров.</p>
+                <p>Название «Зянгяр-куль» переводится как «лазурное озеро». В солнечную погоду вода отливает насыщенным сине-зелёным цветом, напоминающим тропические лагуны. Зимой озеро не замерзает полностью благодаря тёплым ключам.</p>
+                <p>Вокруг озера оборудована экологическая тропа с информационными стендами, есть зоны для пикников и парковка. Это идеальное место для спокойного отдыха на природе, подводного плавания и красивых фотографий.</p>
+            </div>
+            <div class="lake-stats">
+                <h3 class="stats-title">Характеристики</h3>
+                <div class="stat-item"><span class="stat-name">Площадь</span><span class="stat-value">0,03 км²</span></div>
+                <div class="stat-item"><span class="stat-name">Глубина</span><span class="stat-value">13 м</span></div>
+                <div class="stat-item"><span class="stat-name">Высота над уровнем моря</span><span class="stat-value">145 м</span></div>
+                <div class="stat-item"><span class="stat-name">Длина</span><span class="stat-value">180 м</span></div>
+                <div class="stat-item"><span class="stat-name">Ширина</span><span class="stat-value">120 м</span></div>
+                <div class="stat-item"><span class="stat-name">Тип</span><span class="stat-value">карстовое</span></div>
+                <div class="stat-item"><span class="stat-name">Температура летом</span><span class="stat-value">до +18°C</span></div>
+            </div>
+        </div>
+
+        <div class="lake-gallery">
+            <h2 class="gallery-title">Галерея</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item"><img src="Зянгяркуль 2.jpg" alt="Вид на озеро"></div>
+                <div class="gallery-item"><img src="Зянгяркуль фон.jpg" alt="Бирюзовая вода"></div>
+                <div class="gallery-item"><img src="Зянгяркуль 1.webp" alt="Экотропа вокруг озера"></div>
+            </div>
+        </div>
+
+        <div class="activities">
+            <h2 class="activities-title">Чем заняться</h2>
+            <div class="activities-grid">
+                <div class="activity-card">
+                    <div class="activity-icon"><i class="fas fa-swimmer"></i></div>
+                    <h3>Купание и снорклинг</h3>
+                    <p>Прозрачная вода видимостью до 10 м — отлично подходит для подводного плавания. Осторожно: вода прохладная даже летом!</p>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-icon"><i class="fas fa-hiking"></i></div>
+                    <h3>Экотропа</h3>
+                    <p>Кольцевая тропа вокруг озера протяжённостью 1,5 км с информационными стендами и смотровыми площадками.</p>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-icon"><i class="fas fa-camera"></i></div>
+                    <h3>Фотосессии</h3>
+                    <p>Невероятные оттенки воды и живописные берега привлекают фотографов в любое время года.</p>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-icon"><i class="fas fa-fish"></i></div>
+                    <h3>Подлёдная рыбалка</h3>
+                    <p>Зимой озеро не замерзает полностью благодаря тёплым ключам, здесь ловят гольяна и пескаря.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="location">
+            <h2 class="location-title">Как добраться</h2>
+            <div class="location-content">
+                <div class="location-info">
+                    <p>Озеро находится в Уфимском районе, в 10 км от села Нурлино (в 60 км от Уфы).</p>
+                    <p><strong>На автомобиле:</strong> Из Уфы по трассе Р-240 (на Оренбург) до поворота на Нурлино, затем по асфальтированной дороге 5 км до озера. Время в пути — около 1 часа.</p>
+                    <p><strong>Общественным транспортом:</strong> Автобусом Уфа — Нурлино (маршрут № 135), затем пешком 4 км или на такси.</p>
+                    <p>На берегу есть бесплатная парковка, туалеты и места для мангалов. Рекомендуется приезжать в будние дни, чтобы избежать большого скопления людей.</p>
+                </div>
+                <div class="location-map">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1909.580510024715!2d56.1520!3d54.6952!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x43e7b95c14b8b5a5%3A0x7b8c0b9c5b0b0b0b!2z0JPQvtC70YPQsdC-0LUg0L7Qt9C10YDQvg!5e0!3m2!1sru!2sru!4v1700000000000" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="copyright">
+            <p>&copy; 2026 Туристический портал Башкортостана. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
