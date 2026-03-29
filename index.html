@@ -20,6 +20,43 @@
             --light: #f5f9f6;
             --dark: #1a1f1b;
         }
+       /* Кастомный скруглённый скроллбар для всего сайта */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #e8f0e8;
+            border-radius: 20px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #4a7c59, #2c5530);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2c5530, #1a3a2a);
+        }
+
+/* Для Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #4a7c59 #e8f0e8;
+}
+
+/* Для Edge/IE */
+body {
+    -ms-overflow-style: none;
+}
+
+/* Для Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #4a7c59 #e8f0e8;
+}
 
         body {
             background-color: var(--light);
@@ -945,6 +982,8 @@
                 <li><a href="#lakes">Озера</a></li>
                 <li><a href="#places">Места</a></li>
                 <li><a href="#gallery">Галерея</a></li>
+                <li><a href="#quiz">Викторина</a></li>
+                <li><a href="#guide">Справочник</a></li>
                 <li><a href="#contact">Контакты</a></li>
             </ul>
         </nav>
@@ -1170,15 +1209,15 @@
             <div class="image-counter">
                 <span id="currentImage">1</span> / <span id="totalImages">6</span>
             </div>
-            <div class="modal-container">
-                <div class="modal-content">
-                    <img class="modal-image" id="modalImage" src="" alt="">
+            <div class="modal-container" id="modalContainer">
+                <div class="modal-content" id="modalContent">
+                    <img class="modal-image" id="modalImage" src="" alt="" draggable="false">
                 </div>
             </div>
             <div class="zoom-controls">
-                <button class="zoom-btn" id="zoomIn">+</button>
-                <button class="zoom-btn" id="zoomOut">-</button>
-                <button class="zoom-btn" id="resetZoom">⟳</button>
+                <button class="zoom-btn" id="zoomIn"><i class="fas fa-search-plus"></i></button>
+                <button class="zoom-btn" id="zoomOut"><i class="fas fa-search-minus"></i></button>
+                <button class="zoom-btn" id="resetZoom"><i class="fas fa-sync-alt"></i></button>
             </div>
             <div class="modal-controls">
                 <button class="modal-btn" id="prevBtn"><i class="fas fa-chevron-left"></i> Назад</button>
@@ -1186,6 +1225,1272 @@
             </div>
         </div>
     </section>
+<!-- Викторина: Знаете ли вы Башкортостан? -->
+<section class="quiz-section" id="quiz" style="background: linear-gradient(135deg, #e8f0e9 0%, #dce8de 100%); padding: 4rem 2rem;">
+    <div class="section-title">
+        <h2 style="animation: fadeInDown 0.6s ease;">🧠 Знаете ли вы Башкортостан?</h2>
+        <p style="margin-top: 1rem; color: #3a5a3a; font-size: 1.1rem; animation: fadeInUp 0.6s ease 0.2s both;">Проверьте свои знания о природе и географии региона</p>
+    </div>
+
+    <div class="quiz-wrapper" style="max-width: 900px; margin: 0 auto;">
+        <!-- Основной блок викторины -->
+        <div class="quiz-container" id="quizContainer" style="background: white; border-radius: 48px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden; transition: all 0.3s ease;">
+            <!-- Верхняя панель -->
+            <div class="quiz-progress-panel" style="background: linear-gradient(135deg, #2c5530, #4a7c59); padding: 1.2rem 2rem;">
+                <div class="progress-stats" style="display: flex; justify-content: space-between; align-items: center; color: white; flex-wrap: wrap; gap: 10px;">
+                    <div class="quiz-counter">
+                        <i class="fas fa-question-circle"></i> Вопрос <span id="quiz-current-num">1</span> / <span id="quiz-total-num">6</span>
+                    </div>
+                    <div class="quiz-score">
+                        <i class="fas fa-star"></i> Правильно: <span id="quiz-correct-count">0</span>
+                    </div>
+                    <div class="timer-ring-container" style="position: relative; width: 36px; height: 36px;">
+                        <svg width="36" height="36" viewBox="0 0 40 40" style="transform: rotate(-90deg);">
+                            <circle cx="20" cy="20" r="16" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="3"/>
+                            <circle id="timerRing" cx="20" cy="20" r="16" fill="none" stroke="#8fb996" stroke-width="3" stroke-dasharray="100.53" stroke-dashoffset="0" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="progress-bar-full" style="margin-top: 12px; background: rgba(255,255,255,0.3); border-radius: 20px; height: 6px; overflow: hidden;">
+                    <div id="quiz-progress-bar" style="width: 0%; height: 100%; background: #8fb996; border-radius: 20px; transition: width 0.4s ease;"></div>
+                </div>
+            </div>
+
+            <!-- Зона вопроса (всегда видна) -->
+            <div id="quiz-question-area" style="padding: 2rem 2rem 0 2rem; background: white; min-height: 100px;">
+                <!-- Вопрос будет вставлен сюда -->
+            </div>
+
+            <!-- Зона вариантов ответов -->
+            <div id="quiz-options-area" style="padding: 0 2rem 1.5rem 2rem; display: flex; flex-direction: column; gap: 12px;">
+                <!-- Варианты будут здесь -->
+            </div>
+
+            <!-- Зона фидбека -->
+            <div id="quiz-feedback-area" style="padding: 0 2rem 1rem 2rem; min-height: 80px;">
+                <!-- Сообщение о результате -->
+            </div>
+
+            <!-- Кнопки управления -->
+            <div style="padding: 1rem 2rem 2rem 2rem; border-top: 1px solid #e8e8e8; display: flex; justify-content: space-between; align-items: center; background: #fafdfa;">
+                <button id="quiz-reset-btn" class="quiz-btn-secondary" style="background: #e8e8e8; color: #4a6741; border: none; padding: 10px 20px; border-radius: 40px; cursor: pointer; font-weight: 500; transition: all 0.2s;">
+                    <i class="fas fa-redo-alt"></i> Начать заново
+                </button>
+                <button id="quiz-skip-btn" class="quiz-btn-secondary" style="background: #e8e8e8; color: #4a6741; border: none; padding: 10px 25px; border-radius: 40px; cursor: pointer; font-weight: 500; transition: all 0.2s;">
+                    <i class="fas fa-forward"></i> Следующий
+                </button>
+            </div>
+        </div>
+
+        <!-- Результаты (изначально скрыты) -->
+        <div id="quiz-results-area" style="display: none; margin-top: 2rem; animation: fadeInUp 0.6s ease;">
+            <div class="results-card" style="background: white; border-radius: 48px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.2);">
+                <div class="results-header" style="background: linear-gradient(135deg, #2c5530, #4a7c59); padding: 2rem; text-align: center; color: white;">
+                    <i class="fas fa-trophy" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">Ваш результат</h2>
+                    <div class="final-score" style="font-size: 3rem; font-weight: 700; margin: 1rem 0;">
+                        <span id="final-correct">0</span> / <span id="final-total">6</span>
+                    </div>
+                    <div id="final-message" style="font-size: 1.1rem; opacity: 0.9;"></div>
+                </div>
+                <div style="padding: 2rem;">
+                    <h3 style="color: #2c5530; margin-bottom: 1.5rem;"><i class="fas fa-list-check"></i> Разбор ответов</h3>
+                    <div id="answers-breakdown" style="display: flex; flex-direction: column; gap: 1rem;"></div>
+                    <button id="restart-quiz-btn" class="quiz-btn-primary" style="margin-top: 2rem; width: 100%; background: linear-gradient(135deg, #2c5530, #4a7c59); color: white; border: none; padding: 14px; border-radius: 60px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-play"></i> Пройти викторину заново
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Полноэкранное модальное окно для вопроса из результатов -->
+    <div id="resultFullscreenModal" class="result-fullscreen-modal">
+        <div class="result-fullscreen-content">
+            <button class="result-modal-close"><i class="fas fa-times"></i></button>
+            <div id="resultFullscreenBody" class="result-fullscreen-body"></div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounceIn {
+        0% { transform: scale(0.8); opacity: 0; }
+        80% { transform: scale(1.02); }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.02); background: #8fb996; }
+        100% { transform: scale(1); }
+    }
+    @keyframes slideInRight {
+        from { opacity: 0; transform: translateX(30px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .quiz-option {
+        background: #f5f9f6;
+        border: 2px solid #dce8de;
+        border-radius: 60px;
+        padding: 14px 24px;
+        font-size: 1rem;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-weight: 500;
+        color: #1a2f2a;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        animation: slideInRight 0.4s ease;
+    }
+    .quiz-option:hover:not(.disabled-opt) {
+        background: #e6f0e8;
+        border-color: #8fb996;
+        transform: translateX(8px) scale(1.02);
+    }
+    .quiz-option.correct-answer {
+        background: linear-gradient(135deg, #2c5530, #4a7c59);
+        border-color: #2c5530;
+        color: white;
+        pointer-events: none;
+        animation: pulse 0.5s ease;
+    }
+    .quiz-option.wrong-answer {
+        background: linear-gradient(135deg, #c77a6f, #b5655a);
+        border-color: #c77a6f;
+        color: white;
+        pointer-events: none;
+        animation: shake 0.4s ease;
+    }
+    .quiz-option.disabled-opt {
+        pointer-events: none;
+        opacity: 0.7;
+    }
+    .quiz-option .option-letter {
+        width: 32px;
+        height: 32px;
+        background: rgba(0,0,0,0.1);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+    .correct-answer .option-letter, .wrong-answer .option-letter {
+        background: rgba(255,255,255,0.2);
+    }
+    
+    .feedback-correct {
+        background: linear-gradient(135deg, #e6f4e6, #d4ecd4);
+        color: #2c6e2c;
+        padding: 14px 20px;
+        border-radius: 20px;
+        border-left: 5px solid #2c6e2c;
+        animation: bounceIn 0.5s ease;
+    }
+    .feedback-wrong {
+        background: linear-gradient(135deg, #ffe6e2, #ffd9d4);
+        color: #a1422f;
+        padding: 14px 20px;
+        border-radius: 20px;
+        border-left: 5px solid #c77a6f;
+        animation: shake 0.4s ease;
+    }
+    .feedback-neutral {
+        background: #f0f4f0;
+        color: #6c8f72;
+        padding: 14px 20px;
+        border-radius: 20px;
+        animation: fadeInUp 0.4s ease;
+    }
+    
+    .quiz-btn-secondary:hover {
+        transform: translateY(-2px);
+        filter: brightness(0.95);
+    }
+    .quiz-btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(44, 85, 48, 0.3);
+    }
+    
+    /* Разбор ответов */
+    .answer-breakdown-item {
+        background: #f9faf9;
+        border-radius: 20px;
+        padding: 1rem;
+        transition: all 0.3s ease;
+        animation: slideInRight 0.4s ease;
+        border-left: 4px solid #ddd;
+        position: relative;
+    }
+    .answer-breakdown-item.correct-item {
+        border-left-color: #2c6e2c;
+        background: #e8f5e8;
+    }
+    .answer-breakdown-item.wrong-item {
+        border-left-color: #c77a6f;
+        background: #fff0ed;
+    }
+    .answer-breakdown-item:hover {
+        transform: translateX(5px);
+    }
+    .user-answer-badge {
+        background: rgba(0,0,0,0.08);
+        padding: 4px 12px;
+        border-radius: 30px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+    .answer-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .answer-action-btn {
+        background: none;
+        border: 1px solid #c2d4c2;
+        padding: 6px 12px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 0.75rem;
+        transition: all 0.2s;
+        color: #4a6741;
+    }
+    .answer-action-btn:hover {
+        background: #8fb996;
+        border-color: #8fb996;
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    /* Полноэкранное модальное окно для результатов */
+    .result-fullscreen-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.95);
+        z-index: 10001;
+        backdrop-filter: blur(10px);
+        animation: fadeInUp 0.3s ease;
+    }
+    .result-fullscreen-content {
+        position: relative;
+        width: 90%;
+        max-width: 800px;
+        max-height: 85vh;
+        margin: 8vh auto;
+        background: #fffef8;
+        border-radius: 32px;
+        overflow-y: auto;
+        padding: 2rem;
+        box-shadow: 0 30px 50px rgba(0,0,0,0.3);
+        animation: bounceIn 0.4s ease;
+    }
+    .result-fullscreen-content::-webkit-scrollbar { width: 6px; }
+    .result-fullscreen-content::-webkit-scrollbar-track { background: #f0e5d2; border-radius: 10px; }
+    .result-fullscreen-content::-webkit-scrollbar-thumb { background: #8fb996; border-radius: 10px; }
+    .result-modal-close {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        background: #e2d5bb;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: all 0.2s;
+    }
+    .result-modal-close:hover {
+        background: #8fb996;
+        transform: rotate(90deg);
+        color: white;
+    }
+    .result-fullscreen-body {
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+    .expanded-question-content {
+        display: none;
+        margin-top: 12px;
+        padding: 12px;
+        background: #f9faf9;
+        border-radius: 16px;
+        animation: fadeInUp 0.3s ease;
+    }
+    .expanded-question-content.show {
+        display: block;
+    }
+    
+    @media (max-width: 600px) {
+        .quiz-option { padding: 10px 18px; font-size: 0.9rem; }
+        .progress-stats { font-size: 0.8rem; }
+        .answer-breakdown-item { flex-direction: column; align-items: flex-start; }
+        .user-answer-badge { margin-top: 8px; align-self: flex-start; }
+    }
+</style>
+
+<script>
+    (function() {
+        const quizData = [
+            { question: "🏞️ Какое озеро является САМЫМ ГЛУБОКИМ в Башкортостане?", options: ["Аслыкуль", "Кандрыкуль", "Банное (Яктыкуль)", "Голубое озеро"], correct: 2, explanation: "Озеро Банное (Яктыкуль) — самое глубокое озеро республики, его максимальная глубина достигает 28 метров!" },
+            { question: "🌊 Какое озеро является САМЫМ БОЛЬШИМ по площади в Башкортостане?", options: ["Кандрыкуль", "Голубое озеро", "Банное (Яктыкуль)", "Аслыкуль"], correct: 3, explanation: "Озеро Аслыкуль — крупнейший водоём республики, его площадь — 23,5 км², его часто называют 'Башкирским морем'." },
+            { question: "🦌 Какая пещера считается САМОЙ ПОПУЛЯРНОЙ и известной в Башкортостане?", options: ["Сумган-Кутук", "Шульган-Таш (Капова пещера)", "Кутук-Сумган", "Аскинская ледяная"], correct: 1, explanation: "Капова пещера (Шульган-Таш) — всемирно известный археологический памятник с наскальными рисунками эпохи палеолита." },
+            { question: "🗺️ Какова площадь территории Республики Башкортостан (тыс. км²)?", options: ["112,3 тыс. км²", "142,94 тыс. км²", "98,5 тыс. км²", "165,2 тыс. км²"], correct: 1, explanation: "Площадь Башкортостана — 142 947 км² (около 142,94 тыс. км²)." },
+            { question: "🏔️ Какая гора является ВЫСОЧАЙШЕЙ вершиной Башкортостана?", options: ["Иремель", "Малый Ямантау", "Ямантау", "Масим"], correct: 2, explanation: "Гора Ямантау — высочайшая точка республики (1640 м)." },
+            { question: "💎 Какое озеро из-за необычного цвета воды называют 'Бирюзовым чудом'?", options: ["Кандрыкуль", "Голубое озеро (Зянгяр-куль)", "Банное", "Аслыкуль"], correct: 1, explanation: "Голубое озеро (Зянгяр-куль) — карстовый водоём с яркой бирюзовой водой." }
+        ];
+        
+        let currentIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let autoTimer = null;
+        let isWaitingForNext = false;
+        let totalCorrect = 0;
+        
+        // DOM элементы
+        const quizContainer = document.getElementById('quizContainer');
+        const questionArea = document.getElementById('quiz-question-area');
+        const optionsArea = document.getElementById('quiz-options-area');
+        const feedbackArea = document.getElementById('quiz-feedback-area');
+        const resetBtn = document.getElementById('quiz-reset-btn');
+        const skipBtn = document.getElementById('quiz-skip-btn');
+        const currentNumSpan = document.getElementById('quiz-current-num');
+        const totalNumSpan = document.getElementById('quiz-total-num');
+        const correctCountSpan = document.getElementById('quiz-correct-count');
+        const progressBar = document.getElementById('quiz-progress-bar');
+        const timerRing = document.getElementById('timerRing');
+        const resultsArea = document.getElementById('quiz-results-area');
+        
+        totalNumSpan.textContent = quizData.length;
+        const circumference = 100.53;
+        
+        function stopAutoTimer() {
+            if (autoTimer) clearTimeout(autoTimer);
+            isWaitingForNext = false;
+            if (timerRing) {
+                timerRing.style.transition = 'none';
+                timerRing.style.strokeDashoffset = circumference;
+            }
+        }
+        
+        function startAutoTimer() {
+            stopAutoTimer();
+            if (userAnswers[currentIndex] === null) return;
+            
+            isWaitingForNext = true;
+            
+            if (timerRing) {
+                timerRing.style.transition = 'none';
+                timerRing.style.strokeDashoffset = circumference;
+                timerRing.getBoundingClientRect();
+                timerRing.style.transition = `stroke-dashoffset 4000ms linear`;
+                timerRing.style.strokeDashoffset = '0';
+            }
+            
+            autoTimer = setTimeout(() => {
+                if (isWaitingForNext) {
+                    nextQuestion();
+                }
+            }, 4000);
+        }
+        
+        function updateCorrectCount() {
+            let count = 0;
+            for (let i = 0; i < userAnswers.length; i++) {
+                if (userAnswers[i] !== null && userAnswers[i] === quizData[i].correct) count++;
+            }
+            totalCorrect = count;
+            correctCountSpan.textContent = totalCorrect;
+        }
+        
+        function updateProgressBar() {
+            const answered = userAnswers.filter(a => a !== null).length;
+            const percent = (answered / quizData.length) * 100;
+            progressBar.style.width = percent + '%';
+        }
+        
+        function renderCurrentQuestion() {
+            if (currentIndex >= quizData.length) {
+                showResults();
+                return;
+            }
+            
+            stopAutoTimer();
+            
+            const q = quizData[currentIndex];
+            const hasAnswered = userAnswers[currentIndex] !== null;
+            
+            // Вопрос
+            questionArea.innerHTML = `<div style="animation: fadeInUp 0.4s ease;"><h3 style="font-size: 1.6rem; color: #2c5530; margin: 0;">${q.question}</h3></div>`;
+            
+            // Варианты
+            const letters = ['А', 'Б', 'В', 'Г'];
+            let optionsHtml = '';
+            q.options.forEach((opt, idx) => {
+                let additionalClass = '';
+                if (hasAnswered) {
+                    additionalClass = 'disabled-opt';
+                    if (idx === q.correct) additionalClass += ' correct-answer';
+                    if (idx === userAnswers[currentIndex] && idx !== q.correct) additionalClass += ' wrong-answer';
+                }
+                optionsHtml += `<div class="quiz-option ${additionalClass}" data-opt-index="${idx}" style="animation-delay: ${idx * 0.05}s"><span class="option-letter">${letters[idx]}</span><span>${opt}</span></div>`;
+            });
+            optionsArea.innerHTML = optionsHtml;
+            
+            // Фидбек
+            if (hasAnswered) {
+                const isCorrect = (userAnswers[currentIndex] === q.correct);
+                if (isCorrect) {
+                    feedbackArea.innerHTML = `<div class="feedback-correct"><i class="fas fa-check-circle"></i> <strong>Правильно!</strong> ${q.explanation}</div>`;
+                } else {
+                    feedbackArea.innerHTML = `<div class="feedback-wrong"><i class="fas fa-times-circle"></i> <strong>Неверно.</strong> Правильный ответ: «${q.options[q.correct]}». ${q.explanation}</div>`;
+                }
+                startAutoTimer();
+            } else {
+                feedbackArea.innerHTML = `<div class="feedback-neutral"><i class="far fa-lightbulb"></i> Выберите один из вариантов ответа</div>`;
+            }
+            
+            currentNumSpan.textContent = currentIndex + 1;
+            updateCorrectCount();
+            updateProgressBar();
+            
+            // Обработчики для вариантов
+            if (!hasAnswered) {
+                document.querySelectorAll('.quiz-option').forEach(optDiv => {
+                    optDiv.addEventListener('click', (e) => {
+                        if (userAnswers[currentIndex] !== null) return;
+                        const selectedIdx = parseInt(optDiv.dataset.optIndex);
+                        if (isNaN(selectedIdx)) return;
+                        userAnswers[currentIndex] = selectedIdx;
+                        updateCorrectCount();
+                        renderCurrentQuestion();
+                    });
+                });
+            }
+        }
+        
+        function nextQuestion() {
+            if (currentIndex < quizData.length) {
+                currentIndex++;
+                if (currentIndex < quizData.length) {
+                    renderCurrentQuestion();
+                } else {
+                    showResults();
+                }
+            } else {
+                showResults();
+            }
+        }
+        
+        // Функции для работы с модальным окном из результатов
+        const resultModal = document.getElementById('resultFullscreenModal');
+        const resultFullscreenBody = document.getElementById('resultFullscreenBody');
+        
+        function openResultFullscreen(questionText, options, userAnswerIdx, correctIdx, explanation, isCorrect) {
+            const letters = ['А', 'Б', 'В', 'Г'];
+            let optionsHtml = '';
+            options.forEach((opt, idx) => {
+                let additionalClass = '';
+                if (idx === correctIdx) additionalClass = 'correct-answer';
+                if (idx === userAnswerIdx && idx !== correctIdx) additionalClass = 'wrong-answer';
+                optionsHtml += `<div class="quiz-option ${additionalClass}" style="margin-bottom: 10px; cursor: default;"><span class="option-letter">${letters[idx]}</span><span>${opt}</span></div>`;
+            });
+            
+            resultFullscreenBody.innerHTML = `
+                <h3 style="color: #2c5530; margin-bottom: 1.5rem; font-size: 1.5rem;">${questionText}</h3>
+                <div style="margin-bottom: 1rem;">${optionsHtml}</div>
+                <div class="${isCorrect ? 'feedback-correct' : 'feedback-wrong'}" style="margin-top: 15px;">
+                    <i class="fas ${isCorrect ? 'fa-check-circle' : 'fa-times-circle'}"></i> 
+                    <strong>${isCorrect ? 'Правильно!' : 'Неверно.'}</strong> ${explanation}
+                </div>
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #e2d5bb; font-size: 0.9rem; color: #7f6e4a;">
+                    <i class="fas fa-user"></i> Ваш ответ: ${options[userAnswerIdx] || 'не выбран'}
+                </div>
+            `;
+            resultModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function showResults() {
+            stopAutoTimer();
+            quizContainer.style.display = 'none';
+            resultsArea.style.display = 'block';
+            
+            const finalCorrect = totalCorrect;
+            const total = quizData.length;
+            const percent = Math.round((finalCorrect / total) * 100);
+            
+            let message = '';
+            if (percent === 100) message = '🎉 Идеально! Вы настоящий знаток Башкортостана! 🎉';
+            else if (percent >= 75) message = '🌟 Отлично! Вы очень хорошо знаете природу Башкортостана! 🌟';
+            else if (percent >= 50) message = '👍 Хороший результат! Стоит ещё немного изучить этот удивительный край.';
+            else message = '📚 Неплохо! Предлагаем вам ещё раз посмотреть наш сайт и узнать больше о красивейших местах.';
+            
+            document.getElementById('final-correct').textContent = finalCorrect;
+            document.getElementById('final-total').textContent = total;
+            document.getElementById('final-message').textContent = message;
+            
+            const breakdownDiv = document.getElementById('answers-breakdown');
+            breakdownDiv.innerHTML = '';
+            
+            quizData.forEach((q, idx) => {
+                const userAnswer = userAnswers[idx];
+                const isCorrect = (userAnswer === q.correct);
+                const userAnswerText = userAnswer !== null ? q.options[userAnswer] : 'Не отвечен';
+                const correctAnswerText = q.options[q.correct];
+                
+                const itemDiv = document.createElement('div');
+                itemDiv.className = `answer-breakdown-item ${isCorrect ? 'correct-item' : 'wrong-item'}`;
+                itemDiv.style.animationDelay = `${idx * 0.05}s`;
+                itemDiv.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span style="font-size: 1.2rem;">${isCorrect ? '✅' : '❌'}</span>
+                            <strong>Вопрос ${idx + 1}:</strong> ${q.question.substring(0, 60)}${q.question.length > 60 ? '...' : ''}
+                        </div>
+                        <div class="user-answer-badge">
+                            <i class="fas fa-user"></i> Ваш ответ: ${userAnswerText}
+                        </div>
+                    </div>
+                    <div class="answer-actions">
+                        <button class="answer-action-btn expand-btn" data-idx="${idx}"><i class="fas fa-chevron-down"></i> Развернуть ответ</button>
+                        <button class="answer-action-btn fullscreen-btn" data-idx="${idx}"><i class="fas fa-expand"></i> На весь экран</button>
+                    </div>
+                    <div class="expanded-question-content" id="expand-${idx}">
+                        <div style="margin-top: 8px; font-size: 0.95rem; color: #2c6e2c;">
+                            <i class="fas fa-check-circle"></i> Правильный ответ: ${correctAnswerText}
+                        </div>
+                        <div style="margin-top: 5px; font-size: 0.9rem; color: #666;">${q.explanation}</div>
+                        <div style="margin-top: 10px; padding: 10px; background: #e8f0e9; border-radius: 12px;">
+                            <strong><i class="fas fa-lightbulb"></i> Полный вопрос:</strong><br>
+                            ${q.question}
+                        </div>
+                    </div>
+                `;
+                breakdownDiv.appendChild(itemDiv);
+            });
+            
+            // Обработчики для кнопок развёртки
+            document.querySelectorAll('.expand-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = btn.getAttribute('data-idx');
+                    const expandDiv = document.getElementById(`expand-${idx}`);
+                    expandDiv.classList.toggle('show');
+                    if (expandDiv.classList.contains('show')) {
+                        btn.innerHTML = '<i class="fas fa-chevron-up"></i> Свернуть ответ';
+                    } else {
+                        btn.innerHTML = '<i class="fas fa-chevron-down"></i> Развернуть ответ';
+                    }
+                });
+            });
+            
+            // Обработчики для кнопок полноэкранного режима
+            document.querySelectorAll('.fullscreen-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = parseInt(btn.getAttribute('data-idx'));
+                    const q = quizData[idx];
+                    const userAnswer = userAnswers[idx];
+                    const isCorrect = (userAnswer === q.correct);
+                    openResultFullscreen(
+                        q.question, q.options, 
+                        userAnswer !== null ? userAnswer : 0, 
+                        q.correct, q.explanation, isCorrect
+                    );
+                });
+            });
+        }
+        
+        function resetQuiz() {
+            stopAutoTimer();
+            currentIndex = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            totalCorrect = 0;
+            isWaitingForNext = false;
+            
+            quizContainer.style.display = 'block';
+            resultsArea.style.display = 'none';
+            
+            renderCurrentQuestion();
+        }
+        
+        function skipToNext() {
+            if (userAnswers[currentIndex] === null) {
+                feedbackArea.innerHTML = `<div class="feedback-neutral" style="animation: shake 0.4s ease;"><i class="fas fa-exclamation-triangle"></i> Сначала выберите ответ!</div>`;
+                return;
+            }
+            if (isWaitingForNext) {
+                stopAutoTimer();
+                nextQuestion();
+            }
+        }
+        
+        // Обработчики
+        resetBtn.addEventListener('click', resetQuiz);
+        skipBtn.addEventListener('click', skipToNext);
+        document.getElementById('restart-quiz-btn')?.addEventListener('click', resetQuiz);
+        
+        // Закрытие модального окна
+        document.querySelector('.result-modal-close')?.addEventListener('click', () => {
+            resultModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        resultModal?.addEventListener('click', (e) => {
+            if (e.target === resultModal) {
+                resultModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        renderCurrentQuestion();
+    })();
+</script>
+<!-- ========== ПУТЕВОДИТЕЛЬ ПО ЛЕТНЕМУ ОТДЫХУ (исправленный с анимациями) ========== -->
+<section class="guide-section" id="guide" style="background: linear-gradient(135deg, #fefcf5 0%, #f8f3e8 100%); padding: 4rem 2rem;">
+    <div class="section-title">
+        <h2 style="animation: fadeInDown 0.8s ease;">🥾 Летний гид по Башкортостану</h2>
+        <p style="margin-top: 0.8rem; color: #6b5b3e; animation: fadeInUp 0.8s ease 0.2s both;">Советы по подготовке, снаряжению и лучшим местам для активного отдыха</p>
+    </div>
+
+    <div class="guide-categories" style="max-width: 1400px; margin: 0 auto;">
+        <!-- КАТЕГОРИЯ 1: Походы в горы -->
+        <div class="guide-main-cat">
+            <button class="main-cat-toggle" data-target="cat1">
+                <span><i class="fas fa-mountain"></i> Походы в горы (на день)</span>
+                <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div id="cat1" class="main-cat-content">
+                <div class="guide-grid">
+                    <div class="guide-card">
+                        <div class="card-header" data-target="sub1-1" data-card="card1-1">
+                            <div class="progress-side">
+                                <div class="progress-bar-bg"><div class="progress-fill" id="fill-sub1-1" style="width: 0%;"></div></div>
+                                <span class="read-time"><i class="far fa-clock"></i> 4 мин</span>
+                            </div>
+                            <h3><i class="fas fa-backpack"></i> Подготовка к горному походу</h3>
+                            <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                        <div id="sub1-1" class="card-content">
+                            <div class="text-content">
+                                <p><strong>📋 Чек-лист подготовки (за 1–2 дня до похода):</strong></p>
+                                <ul>
+                                    <li>Проверить прогноз погоды — идеально: +18..+24°C, без осадков, облачность умеренная.</li>
+                                    <li>Сообщить близким маршрут и примерное время возвращения.</li>
+                                    <li>Зарядить телефон, взять пауэрбанк (в горах связь нестабильна).</li>
+                                    <li>Скачать офлайн-карты (Maps.me, Locus Map) района Иремеля или хребта Уреньга.</li>
+                                    <li>Проверить обувь (треккинговые ботинки должны быть разношены!).</li>
+                                </ul>
+                                <p><strong>🎒 Базовое снаряжение (на день):</strong> рюкзак 20–30 л, треккинговые палки, дождевик, флиска/термобельё, головной убор, солнцезащитные очки, крем SPF 50+, аптечка (пластыри, бинт, йод, обезбол, от аллергии), нож, фонарик.</p>
+                                <div class="tip-box"><i class="fas fa-lightbulb"></i> Совет: Начинайте восхождение рано утром (5-6 утра), чтобы к обеду быть на вершине и избежать жары и гроз.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="guide-card">
+                        <div class="card-header" data-target="sub1-2" data-card="card1-2">
+                            <div class="progress-side">
+                                <div class="progress-bar-bg"><div class="progress-fill" id="fill-sub1-2" style="width: 0%;"></div></div>
+                                <span class="read-time"><i class="far fa-clock"></i> 5 мин</span>
+                            </div>
+                            <h3><i class="fas fa-utensils"></i> Питание и вода</h3>
+                            <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                        <div id="sub1-2" class="card-content">
+                            <div class="text-content">
+                                <p><strong>💧 Норма воды:</strong> минимум 1,5–2 литра на человека в день при активности. В жару — до 3 л. Берите термос с чаем и бутылки с водой + таблетки для обеззараживания (Aquatabs, Пантоцид).</p>
+                                <p><strong>🥪 Что брать перекусывать:</strong> батончики-мюсли, орехи, сухофрукты, бутерброды с сыром/колбасой (не скоропорт!), шоколад, яблоки. Горячее — термос с супом или кашей быстрого приготовления + горелка с газом (если планируете привал с чаем).</p>
+                                <p><strong>🚫 Не берите:</strong> скоропортящиеся продукты (йогурты, варёную колбасу), много консервов в жести (тяжёлые), газировку.</p>
+                                <div class="tip-box"><i class="fas fa-leaf"></i> Экосовет: Забирайте весь мусор с собой! В горах нет мусорок.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="guide-card">
+                        <div class="card-header" data-target="sub1-3" data-card="card1-3">
+                            <div class="progress-side">
+                                <div class="progress-bar-bg"><div class="progress-fill" id="fill-sub1-3" style="width: 0%;"></div></div>
+                                <span class="read-time"><i class="far fa-clock"></i> 3 мин</span>
+                            </div>
+                            <h3><i class="fas fa-cloud-sun"></i> Какая погода подходит для гор?</h3>
+                            <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                        <div id="sub1-3" class="card-content">
+                            <div class="text-content">
+                                <p><strong>✅ Идеальные условия:</strong> температура днём +18..+24°C, без дождя, слабый ветер до 6 м/с, влажность 40–60%. В Башкортостане лучшие месяцы для однодневных походов — июль и первая половина августа. На вершинах всегда на 5–8°C холоднее + возможен туман.</p>
+                                <p><strong>⚠️ Когда НЕ стоит идти:</strong> ливень (камни скользкие), гроза (опасно на открытых хребтах), сильный ветер >12 м/с, жара выше +30°C (риск теплового удара). Обязательно смотреть прогноз на gismeteo/rp5 для района горы Иремель или хребта Зигальга.</p>
+                                <div class="weather-warning"><i class="fas fa-bolt"></i> Важно: При приближении грозы немедленно спускайтесь с открытых вершин!</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- КАТЕГОРИЯ 2: Пляжный отдых -->
+        <div class="guide-main-cat">
+            <button class="main-cat-toggle" data-target="cat2">
+                <span><i class="fas fa-umbrella-beach"></i> Пляжный отдых (озёра Башкирии)</span>
+                <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div id="cat2" class="main-cat-content">
+                <div class="guide-grid">
+                    <div class="guide-card">
+                        <div class="card-header" data-target="sub2-1" data-card="card2-1">
+                            <div class="progress-side"><div class="progress-bar-bg"><div class="progress-fill" id="fill-sub2-1"></div></div><span class="read-time"><i class="far fa-clock"></i> 4 мин</span></div>
+                            <h3><i class="fas fa-water"></i> Что брать на озёра</h3>
+                            <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                        <div id="sub2-1" class="card-content">
+                            <div class="text-content">
+                                <p><strong>🏖️ Пляжный набор:</strong> купальник/плавки, пляжное полотенце, сланцы, панама/кепка, солнцезащитный крем (SPF 30+), зонт или тент от солнца, надувной матрас/круг, непромокаемый чехол для телефона, влажные салфетки, полотенце для ног.</p>
+                                <p><strong>🍉 Еда на пляже:</strong> нарезанные фрукты в контейнере, бутерброды, орешки, печенье, вода 2–3 литра. Алкоголь — запрещён на официальных пляжах. Обязательно взять пакет для мусора!</p>
+                                <p><strong>🎒 Дополнительно:</strong> пауэрбанк, колонка, книга/журнал, маска для подводного плавания (на Банном вода очень прозрачная).</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="guide-card">
+                        <div class="card-header" data-target="sub2-2" data-card="card2-2">
+                            <div class="progress-side"><div class="progress-bar-bg"><div class="progress-fill" id="fill-sub2-2"></div></div><span class="read-time"><i class="far fa-clock"></i> 2 мин</span></div>
+                            <h3><i class="fas fa-temperature-high"></i> Температура воды и комфортные дни</h3>
+                            <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                        <div id="sub2-2" class="card-content">
+                            <div class="text-content">
+                                <p>На Аслыкуле и Кандрыкуле вода прогревается до +22..+24°C к середине июля. На Банном (глубокое) — прохладнее, +20..+22°C. Лучшие часы для купания — 11:00–17:00. Идеальная погода: малооблачно, +26..+30°C, слабый ветер.</p>
+                                <div class="tip-box"><i class="fas fa-sun"></i> Лайфхак: Приезжайте на пляж к 9 утра — успеете занять лучшее место и избежите толп.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="guide-card">
+                        <div class="card-header" data-target="sub2-3" data-card="card2-3">
+                            <div class="progress-side"><div class="progress-bar-bg"><div class="progress-fill" id="fill-sub2-3"></div></div><span class="read-time"><i class="far fa-clock"></i> 3 мин</span></div>
+                            <h3><i class="fas fa-car"></i> Топ-3 озера с удобными пляжами</h3>
+                            <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                        <div id="sub2-3" class="card-content">
+                            <div class="text-content">
+                                <ul>
+                                    <li><strong>Аслыкуль</strong> — песчаное дно, пологий вход, есть дикие пляжи и базы отдыха.</li>
+                                    <li><strong>Кандрыкуль</strong> — много оборудованных зон, кафе, прокат катамаранов. Идеально для семей с детьми.</li>
+                                    <li><strong>Голубое озеро (Зянгяр-куль)</strong> — не для купания (очень холодное), зато невероятные фото и снорклинг.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- КАТЕГОРИЯ 3: Многодневные походы -->
+        <div class="guide-main-cat">
+            <button class="main-cat-toggle" data-target="cat3">
+                <span><i class="fas fa-campground"></i> Многодневные походы (2–4 дня)</span>
+                <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div id="cat3" class="main-cat-content">
+                <div class="guide-grid">
+                    <div class="guide-card">
+                        <div class="card-header" data-target="sub3-1" data-card="card3-1">
+                            <div class="progress-side"><div class="progress-bar-bg"><div class="progress-fill" id="fill-sub3-1"></div></div><span class="read-time"><i class="far fa-clock"></i> 6 мин</span></div>
+                            <h3><i class="fas fa-tent"></i> Снаряжение для ночёвки</h3>
+                            <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                        <div id="sub3-1" class="card-content">
+                            <div class="text-content">
+                                <p><strong>🎒 MUST HAVE:</strong> палатка (трёхсезонка), спальник (комфорт +5°C), коврик-пенка, налобный фонарь, горелка + газ, котелок, запас носков и термобелья, влажные салфетки, репелленты, лопатка-сапёрка. Вес рюкзака — не более 18–20 кг.</p>
+                                <p><strong>🗺️ Маршруты для новичков:</strong> хребет Уреньга, окрестности озера Банное, тропа к водопаду Атыш. Обязательно зарегистрируйтесь в МЧС!</p>
+                                <div class="tip-box"><i class="fas fa-map-marked-alt"></i> Скачайте приложение «Поход» — там есть треки и возможность делиться геолокацией с близкими.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="guide-card">
+                        <div class="card-header" data-target="sub3-2" data-card="card3-2">
+                            <div class="progress-side"><div class="progress-bar-bg"><div class="progress-fill" id="fill-sub3-2"></div></div><span class="read-time"><i class="far fa-clock"></i> 4 мин</span></div>
+                            <h3><i class="fas fa-first-aid"></i> Медицина и безопасность</h3>
+                            <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                        <div id="sub3-2" class="card-content">
+                            <div class="text-content">
+                                <p>Аптечка: перекись, бинт, пластыри, антигистаминное, сорбенты, жаропонижающее, пинцет (для клещей). Прививка от энцефалита — обязательно для длительных походов. Каждые 2 часа осматривайте одежду. Не пейте воду из ручьёв без кипячения!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- КАТЕГОРИЯ 4: Рыбалка -->
+        <div class="guide-main-cat">
+            <button class="main-cat-toggle" data-target="cat4">
+                <span><i class="fas fa-fish"></i> Рыбалка и водные виды спорта</span>
+                <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div id="cat4" class="main-cat-content">
+                <div class="guide-grid">
+                    <div class="guide-card">
+                        <div class="card-header" data-target="sub4-1" data-card="card4-1">
+                            <div class="progress-side"><div class="progress-bar-bg"><div class="progress-fill" id="fill-sub4-1"></div></div><span class="read-time"><i class="far fa-clock"></i> 4 мин</span></div>
+                            <h3><i class="fas fa-fishing-rod"></i> Лучшие места для рыбалки</h3>
+                            <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                        <div id="sub4-1" class="card-content">
+                            <div class="text-content">
+                                <p>На Банном ловят сига, рипуса, окуня, щуку. На Кандрыкуле — лещ, плотва, карась. Аслыкуль славится крупной щукой. Обязательно оформить путёвку! Лучшее время: раннее утро 4:00–8:00 и вечерняя зорька.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="guide-card">
+                        <div class="card-header" data-target="sub4-2" data-card="card4-2">
+                            <div class="progress-side"><div class="progress-bar-bg"><div class="progress-fill" id="fill-sub4-2"></div></div><span class="read-time"><i class="far fa-clock"></i> 2 мин</span></div>
+                            <h3><i class="fas fa-wind"></i> Виндсерфинг на Аслыкуле</h3>
+                            <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                        <div id="sub4-2" class="card-content">
+                            <div class="text-content">
+                                <p>Аслыкуль называют «башкирским морем» за постоянные ветра. Сезон: июнь–сентябрь. Оптимальный ветер 6–12 м/с. Есть прокат оборудования и инструкторы (от 1500 ₽). Обязательно гидрокостюм!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- КАТЕГОРИЯ 5: Запасной план -->
+        <div class="guide-main-cat">
+            <button class="main-cat-toggle" data-target="cat5">
+                <span><i class="fas fa-cloud-rain"></i> Запасной план (музеи, пещеры, СПА)</span>
+                <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div id="cat5" class="main-cat-content">
+                <div class="guide-grid">
+                    <div class="guide-card">
+                        <div class="card-header" data-target="sub5-1" data-card="card5-1">
+                            <div class="progress-side"><div class="progress-bar-bg"><div class="progress-fill" id="fill-sub5-1"></div></div><span class="read-time"><i class="far fa-clock"></i> 3 мин</span></div>
+                            <h3><i class="fas fa-archway"></i> Капова пещера (Шульган-Таш)</h3>
+                            <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                        <div id="sub5-1" class="card-content">
+                            <div class="text-content">
+                                <p>Уникальный археологический памятник с рисунками древних людей. Экскурсия длится 1,5 часа, внутри +8..+10°C даже летом — берите тёплую кофту. Билеты лучше бронировать за 2 недели.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="guide-card">
+                        <div class="card-header" data-target="sub5-2" data-card="card5-2">
+                            <div class="progress-side"><div class="progress-bar-bg"><div class="progress-fill" id="fill-sub5-2"></div></div><span class="read-time"><i class="far fa-clock"></i> 2 мин</span></div>
+                            <h3><i class="fas fa-hot-tub"></i> Термы и базы отдыха</h3>
+                            <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                        <div id="sub5-2" class="card-content">
+                            <div class="text-content">
+                                <p>На берегу озера Банное работает термальный комплекс «Башкирия» с бассейнами 36–40°C, саунами. Также можно заехать в санаторий «Яктыкуль» на СПА-процедуры.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .guide-categories { display: flex; flex-direction: column; gap: 1.2rem; }
+    .guide-main-cat { border-radius: 28px; background: white; box-shadow: 0 8px 20px rgba(0,0,0,0.08); overflow: hidden; transition: all 0.3s ease; }
+    .guide-main-cat:hover { box-shadow: 0 12px 30px rgba(0,0,0,0.12); }
+    
+    .main-cat-toggle { width: 100%; padding: 1.2rem 1.8rem; background: linear-gradient(135deg, #f9f3e4 0%, #f5ecdf 100%); border: none; font-size: 1.4rem; font-weight: 700; text-align: left; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: #3a5a3a; transition: all 0.3s ease; }
+    .main-cat-toggle:hover { background: linear-gradient(135deg, #f5ecdf 0%, #efe2cd 100%); padding-left: 2.2rem; }
+    .main-cat-toggle span:first-child i { margin-right: 12px; }
+    .toggle-icon { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: inline-block; }
+    .main-cat-toggle.active-toggle .toggle-icon { transform: rotate(180deg); }
+    
+    .main-cat-content { display: none; padding: 1.5rem 1.2rem 2rem; background: #fffef8; border-top: 2px solid #e2d5bb; }
+    
+    .guide-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 1.8rem; }
+    
+    .guide-card { background: white; border-radius: 24px; box-shadow: 0 6px 14px rgba(0,0,0,0.05); border: 1px solid #f0e5d2; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
+    .guide-card:hover { transform: translateY(-5px); box-shadow: 0 20px 30px -12px rgba(0,0,0,0.15); }
+    
+    .card-header { display: flex; align-items: center; gap: 12px; padding: 1rem 1.2rem; background: #fefaf2; cursor: pointer; border-bottom: 1px solid #f0e5d2; flex-wrap: wrap; transition: background 0.2s ease; position: relative; z-index: 2; }
+    .card-header:hover { background: #fef5e8; }
+    .card-header h3 { flex: 2; font-size: 1.15rem; margin: 0; display: flex; align-items: center; gap: 8px; color: #4a6741; }
+    .card-header h3 i { color: #8fb996; font-size: 1.2rem; }
+    
+    .progress-side { display: flex; align-items: center; gap: 10px; min-width: 130px; }
+    .progress-bar-bg { width: 80px; background: #e2d5bb; border-radius: 20px; height: 6px; overflow: hidden; }
+    .progress-fill { background: linear-gradient(90deg, #8fb996, #6a9c7a); width: 0%; height: 100%; border-radius: 20px; transition: width 0.3s ease; }
+    
+    .read-time { font-size: 0.7rem; color: #7f6e4a; white-space: nowrap; background: #f0e5d2; padding: 3px 8px; border-radius: 30px; }
+    
+    .card-toggle { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; color: #b59a6b; margin-left: auto; }
+    .card-header.open-toggle .card-toggle { transform: rotate(180deg); }
+    
+    /* Анимация для выдвижения контента */
+    .card-content { 
+        display: none; 
+        padding: 0 1.5rem;
+        line-height: 1.65; 
+        background: #ffffff; 
+        border-top: 1px solid #f5ecdf;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .card-content.open {
+        display: block;
+        padding: 1.5rem;
+        max-height: 600px;
+        overflow-y: auto;
+        animation: slideDown 0.4s ease-out;
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Анимация для заголовков карточек при открытии категории */
+    .guide-card {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: cardReveal 0.4s ease forwards;
+    }
+    
+    @keyframes cardReveal {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Задержки для анимации карточек */
+    .guide-card:nth-child(1) { animation-delay: 0.05s; }
+    .guide-card:nth-child(2) { animation-delay: 0.1s; }
+    .guide-card:nth-child(3) { animation-delay: 0.15s; }
+    .guide-card:nth-child(4) { animation-delay: 0.2s; }
+    
+    .text-content {
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .text-content p, .text-content ul { 
+        margin-bottom: 0.8rem; 
+        color: #3a3a3a;
+        width: 100%;
+    }
+    .text-content li { 
+        margin-left: 1.4rem; 
+        margin-bottom: 0.4rem;
+        word-break: break-word;
+    }
+    .text-content strong { color: #4a6741; }
+    
+    .tip-box { 
+        background: linear-gradient(135deg, #e8f3e6, #d9ead5); 
+        padding: 12px 16px; 
+        border-radius: 16px; 
+        margin-top: 12px; 
+        border-left: 4px solid #8fb996; 
+        font-size: 0.9rem; 
+        color: #3a5a3a;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .tip-box i { margin-right: 8px; color: #6a9c7a; }
+    
+    .weather-warning { 
+        background: #fff3e0; 
+        padding: 12px 16px; 
+        border-radius: 16px; 
+        margin-top: 12px; 
+        border-left: 4px solid #e67e22; 
+        font-size: 0.9rem; 
+        color: #b45f1b;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .weather-warning i { margin-right: 8px; color: #e67e22; }
+    
+    .card-content::-webkit-scrollbar { width: 6px; }
+    .card-content::-webkit-scrollbar-track { background: #f0e5d2; border-radius: 10px; }
+    .card-content::-webkit-scrollbar-thumb { background: #8fb996; border-radius: 10px; }
+    
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @media (max-width: 700px) { 
+        .guide-grid { 
+            grid-template-columns: 1fr; 
+        } 
+        .card-header { 
+            flex-direction: column; 
+            align-items: stretch; 
+        } 
+        .progress-side { 
+            justify-content: space-between; 
+        }
+        .text-content li {
+            margin-left: 1rem;
+        }
+    }
+</style>
+
+<script>
+    (function() {
+        // Анимация для главных категорий
+        const mainToggles = document.querySelectorAll('.main-cat-toggle');
+        mainToggles.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const targetId = this.getAttribute('data-target');
+                const content = document.getElementById(targetId);
+                const isOpen = content.style.display === 'block';
+                
+                if (isOpen) {
+                    content.style.display = 'none';
+                    this.classList.remove('active-toggle');
+                } else {
+                    content.style.display = 'block';
+                    this.classList.add('active-toggle');
+                    // Анимация для карточек внутри открытой категории
+                    const cards = content.querySelectorAll('.guide-card');
+                    cards.forEach((card, idx) => {
+                        card.style.animation = 'none';
+                        card.offsetHeight; // reflow
+                        card.style.animation = `cardReveal 0.4s ease forwards ${idx * 0.05}s`;
+                    });
+                }
+            });
+        });
+        
+        // Открываем первую категорию
+        const firstCat = document.getElementById('cat1');
+        if (firstCat) {
+            firstCat.style.display = 'block';
+            const firstBtn = document.querySelector('.main-cat-toggle[data-target="cat1"]');
+            if (firstBtn) firstBtn.classList.add('active-toggle');
+        }
+        
+        // Прогресс чтения и управление открытием карточек (только одна открыта)
+        const storageKey = 'guideProgressV5';
+        let currentlyOpenCard = null;
+        
+        function saveProgress(cardId, percent) {
+            let prog = JSON.parse(localStorage.getItem(storageKey) || '{}');
+            prog[cardId] = percent;
+            localStorage.setItem(storageKey, JSON.stringify(prog));
+        }
+        
+        function loadProgress(cardId) {
+            let prog = JSON.parse(localStorage.getItem(storageKey) || '{}');
+            return prog[cardId] || 0;
+        }
+        
+        function closeCard(contentDiv, headerElement, fillId) {
+            if (!contentDiv) return;
+            contentDiv.classList.remove('open');
+            if (headerElement) {
+                headerElement.classList.remove('open-toggle');
+            }
+            // Не закрываем через display, используем класс open
+        }
+        
+        function openCard(contentDiv, headerElement, fillId, cardId) {
+            if (!contentDiv) return;
+            
+            // Закрываем текущую открытую карточку
+            if (currentlyOpenCard && currentlyOpenCard !== contentDiv) {
+                const oldHeader = currentlyOpenCard.closest('.guide-card')?.querySelector('.card-header');
+                const oldFillId = currentlyOpenCard.id ? 'fill-' + currentlyOpenCard.id : null;
+                closeCard(currentlyOpenCard, oldHeader, oldFillId);
+            }
+            
+            // Открываем новую
+            contentDiv.classList.add('open');
+            if (headerElement) {
+                headerElement.classList.add('open-toggle');
+            }
+            currentlyOpenCard = contentDiv;
+            
+            // Восстанавливаем прогресс
+            const savedPercent = loadProgress(cardId);
+            const fillElem = document.getElementById(fillId);
+            if (fillElem && savedPercent > 0) {
+                fillElem.style.width = savedPercent + '%';
+            }
+            
+            // Прокручиваем к сохранённой позиции
+            if (savedPercent > 0) {
+                const scrollHeight = contentDiv.scrollHeight - contentDiv.clientHeight;
+                contentDiv.scrollTop = (savedPercent / 100) * scrollHeight;
+            }
+        }
+        
+        // Настройка всех карточек
+        document.querySelectorAll('.card-header').forEach(header => {
+            const targetId = header.getAttribute('data-target');
+            const contentDiv = document.getElementById(targetId);
+            const fillId = 'fill-' + targetId;
+            const cardId = targetId;
+            
+            if (contentDiv) {
+                // Загружаем сохранённый прогресс для отображения на полоске
+                const saved = loadProgress(cardId);
+                const fill = document.getElementById(fillId);
+                if (fill && saved > 0) fill.style.width = saved + '%';
+                
+                // Отслеживаем скролл для прогресса
+                contentDiv.addEventListener('scroll', function() {
+                    const scrollTop = this.scrollTop;
+                    const scrollHeight = this.scrollHeight - this.clientHeight;
+                    let percent = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+                    percent = Math.min(100, Math.max(0, percent));
+                    const fillElem = document.getElementById(fillId);
+                    if (fillElem) fillElem.style.width = percent + '%';
+                    saveProgress(cardId, percent);
+                });
+                
+                // Обработчик клика по заголовку
+                header.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isOpen = contentDiv.classList.contains('open');
+                    
+                    if (isOpen) {
+                        // Закрываем текущую карточку
+                        closeCard(contentDiv, header, fillId);
+                        currentlyOpenCard = null;
+                    } else {
+                        // Открываем карточку (закроет предыдущую автоматически)
+                        openCard(contentDiv, header, fillId, cardId);
+                    }
+                });
+                
+                // Убеждаемся, что контент изначально закрыт
+                contentDiv.classList.remove('open');
+            }
+        });
+        
+        // При загрузке страницы проверяем, нет ли сохранённых открытых карточек (обычно нет)
+        // Но если есть сохранённый прогресс > 0, не открываем автоматически
+        
+        // Анимация для карточек в уже открытой категории при загрузке
+        const openCat = document.querySelector('.main-cat-content[style*="display: block"]');
+        if (openCat) {
+            const cards = openCat.querySelectorAll('.guide-card');
+            cards.forEach((card, idx) => {
+                card.style.animation = `cardReveal 0.4s ease forwards ${idx * 0.05}s`;
+            });
+        }
+    })();
+</script>
+
+<script>
+    (function() {
+        // Анимация для главных категорий
+        const mainToggles = document.querySelectorAll('.main-cat-toggle');
+        mainToggles.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const targetId = this.getAttribute('data-target');
+                const content = document.getElementById(targetId);
+                const isOpen = content.style.display === 'block';
+                content.style.display = isOpen ? 'none' : 'block';
+                this.classList.toggle('active-toggle', !isOpen);
+            });
+        });
+        
+        // Открываем первую категорию
+        const firstCat = document.getElementById('cat1');
+        if (firstCat) {
+            firstCat.style.display = 'block';
+            const firstBtn = document.querySelector('.main-cat-toggle[data-target="cat1"]');
+            if (firstBtn) firstBtn.classList.add('active-toggle');
+        }
+        
+        // Прогресс чтения
+        const storageKey = 'guideProgressV4';
+        function saveProgress(cardId, percent) {
+            let prog = JSON.parse(localStorage.getItem(storageKey) || '{}');
+            prog[cardId] = percent;
+            localStorage.setItem(storageKey, JSON.stringify(prog));
+        }
+        function loadProgress(cardId) {
+            let prog = JSON.parse(localStorage.getItem(storageKey) || '{}');
+            return prog[cardId] || 0;
+        }
+        
+        document.querySelectorAll('.card-header').forEach(header => {
+            const targetId = header.getAttribute('data-target');
+            const contentDiv = document.getElementById(targetId);
+            const fillId = 'fill-' + targetId;
+            if (contentDiv) {
+                const saved = loadProgress(targetId);
+                const fill = document.getElementById(fillId);
+                if (fill && saved > 0) fill.style.width = saved + '%';
+                
+                contentDiv.addEventListener('scroll', function() {
+                    const scrollTop = this.scrollTop;
+                    const scrollHeight = this.scrollHeight - this.clientHeight;
+                    let percent = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+                    percent = Math.min(100, Math.max(0, percent));
+                    const fillElem = document.getElementById(fillId);
+                    if (fillElem) fillElem.style.width = percent + '%';
+                    saveProgress(targetId, percent);
+                });
+                
+                header.addEventListener('click', () => {
+                    const isOpen = contentDiv.style.display === 'block';
+                    contentDiv.style.display = isOpen ? 'none' : 'block';
+                    header.classList.toggle('open-toggle', !isOpen);
+                    if (!isOpen) {
+                        const savedPercent = loadProgress(targetId);
+                        const fillElem = document.getElementById(fillId);
+                        if (fillElem) fillElem.style.width = savedPercent + '%';
+                        if (savedPercent > 0) {
+                            const scrollHeight = contentDiv.scrollHeight - contentDiv.clientHeight;
+                            contentDiv.scrollTop = (savedPercent / 100) * scrollHeight;
+                        }
+                    }
+                });
+                contentDiv.style.display = 'none';
+            }
+        });
+    })();
+</script>
 
     <section class="contact" id="contact">
         <div class="section-title">
@@ -1320,54 +2625,252 @@
         checkVisibility();
         window.addEventListener('scroll', checkVisibility);
 
-        // Модальное окно галереи
-        const modal = document.getElementById('galleryModal');
-        const modalImage = document.getElementById('modalImage');
-        const currentImageSpan = document.getElementById('currentImage');
-        const totalImagesSpan = document.getElementById('totalImages');
-        const closeBtn = document.querySelector('.close');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const zoomInBtn = document.getElementById('zoomIn');
-        const zoomOutBtn = document.getElementById('zoomOut');
-        const resetZoomBtn = document.getElementById('resetZoom');
+// Модальное окно галереи с поддержкой ЛКМ, ПКМ и СКМ для перемещения
+const modal = document.getElementById('galleryModal');
+const modalImage = document.getElementById('modalImage');
+const modalContainer = document.getElementById('modalContainer');
+const modalContent = document.getElementById('modalContent');
+const currentImageSpan = document.getElementById('currentImage');
+const totalImagesSpan = document.getElementById('totalImages');
+const closeBtn = document.querySelector('.close');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const zoomInBtn = document.getElementById('zoomIn');
+const zoomOutBtn = document.getElementById('zoomOut');
+const resetZoomBtn = document.getElementById('resetZoom');
 
-        const galleryImages = ['Хребты.jpg','Т Леса.jpg','Водопад.jpg','Осень.jpg','Природа 1.jpg','Природа 2.jpg'];
-        let currentIndex = 0;
-        let scale = 1;
+const galleryImages = ['Хребты.jpg','Т Леса.jpg','Водопад.jpg','Осень.jpg','Природа 1.jpg','Природа 2.jpg'];
+let currentIndex = 0;
+let scale = 1;
+let translateX = 0;
+let translateY = 0;
+let isDragging = false;
+let startX = 0;
+let startY = 0;
+let lastTranslateX = 0;
+let lastTranslateY = 0;
 
-        totalImagesSpan.textContent = galleryImages.length;
-        document.querySelectorAll('.gallery-item').forEach((item, index) => {
-            item.addEventListener('click', () => {
-                currentIndex = index;
-                openModal();
-            });
-        });
-        function openModal() { modal.style.display = 'block'; updateModalImage(); document.body.style.overflow = 'hidden'; }
-        function closeModalFunc() { modal.style.display = 'none'; resetZoom(); document.body.style.overflow = 'auto'; }
-        function updateModalImage() { modalImage.src = galleryImages[currentIndex]; currentImageSpan.textContent = currentIndex + 1; resetZoom(); }
-        function nextImage() { currentIndex = (currentIndex + 1) % galleryImages.length; updateModalImage(); }
-        function prevImage() { currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length; updateModalImage(); }
-        function zoomIn() { scale = Math.min(scale + 0.2, 3); modalImage.style.transform = `scale(${scale})`; }
-        function zoomOut() { scale = Math.max(scale - 0.2, 0.5); modalImage.style.transform = `scale(${scale})`; }
-        function resetZoom() { scale = 1; modalImage.style.transform = 'scale(1)'; }
-        closeBtn.addEventListener('click', closeModalFunc);
-        prevBtn.addEventListener('click', prevImage);
-        nextBtn.addEventListener('click', nextImage);
-        zoomInBtn.addEventListener('click', zoomIn);
-        zoomOutBtn.addEventListener('click', zoomOut);
-        resetZoomBtn.addEventListener('click', resetZoom);
-        modal.addEventListener('click', (e) => { if(e.target === modal) closeModalFunc(); });
-        document.addEventListener('keydown', (e) => {
-            if (modal.style.display === 'block') {
-                if(e.key === 'Escape') closeModalFunc();
-                if(e.key === 'ArrowLeft') prevImage();
-                if(e.key === 'ArrowRight') nextImage();
-                if(e.key === '+' || e.key === '=') zoomIn();
-                if(e.key === '-') zoomOut();
-                if(e.key === '0') resetZoom();
-            }
-        });
+totalImagesSpan.textContent = galleryImages.length;
+
+// Открытие галереи по клику на изображение
+document.querySelectorAll('.gallery-item').forEach((item, index) => {
+    item.addEventListener('click', () => {
+        currentIndex = index;
+        openModal();
+    });
+});
+
+function openModal() {
+    modal.style.display = 'flex';
+    resetTransform();
+    updateModalImage();
+    document.body.style.overflow = 'hidden';
+    // Центрируем изображение при открытии
+    setTimeout(() => centerImage(), 50);
+}
+
+function closeModalFunc() {
+    modal.style.display = 'none';
+    resetTransform();
+    document.body.style.overflow = 'auto';
+}
+
+function centerImage() {
+    if (!modalImage || !modalImage.complete) {
+        setTimeout(() => centerImage(), 100);
+        return;
+    }
+    // Центрируем изображение в контейнере
+    const containerRect = modalContainer.getBoundingClientRect();
+    const imgRect = modalImage.getBoundingClientRect();
+    translateX = 0;
+    translateY = 0;
+    lastTranslateX = 0;
+    lastTranslateY = 0;
+    scale = 1;
+    updateTransform();
+}
+
+function updateTransform() {
+    modalImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+}
+
+function resetTransform() {
+    scale = 1;
+    translateX = 0;
+    translateY = 0;
+    lastTranslateX = 0;
+    lastTranslateY = 0;
+    updateTransform();
+}
+
+function updateModalImage() {
+    modalImage.src = galleryImages[currentIndex];
+    currentImageSpan.textContent = currentIndex + 1;
+    resetTransform();
+    setTimeout(() => centerImage(), 100);
+}
+
+function nextImage() {
+    currentIndex = (currentIndex + 1) % galleryImages.length;
+    updateModalImage();
+}
+
+function prevImage() {
+    currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+    updateModalImage();
+}
+
+function zoomIn() {
+    scale = Math.min(scale + 0.2, 3);
+    updateTransform();
+}
+
+function zoomOut() {
+    scale = Math.max(scale - 0.2, 0.5);
+    if (scale <= 0.5 && (translateX !== 0 || translateY !== 0)) {
+        translateX = 0;
+        translateY = 0;
+        lastTranslateX = 0;
+        lastTranslateY = 0;
+    }
+    updateTransform();
+}
+
+function resetZoom() {
+    scale = 1;
+    translateX = 0;
+    translateY = 0;
+    lastTranslateX = 0;
+    lastTranslateY = 0;
+    updateTransform();
+}
+
+// Функция начала перетаскивания (для всех кнопок мыши)
+function startDrag(e) {
+    // Предотвращаем стандартное поведение для ПКМ и СКМ
+    e.preventDefault();
+    if (scale <= 1) return; // Перетаскивание только при увеличенном масштабе
+    
+    isDragging = true;
+    
+    // Получаем координаты в зависимости от типа события
+    let clientX, clientY;
+    if (e.clientX !== undefined) {
+        clientX = e.clientX;
+        clientY = e.clientY;
+    } else if (e.touches) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+    }
+    
+    startX = clientX - translateX;
+    startY = clientY - translateY;
+    lastTranslateX = translateX;
+    lastTranslateY = translateY;
+    modalImage.style.cursor = 'grabbing';
+    
+    // Отключаем контекстное меню для ПКМ во время перетаскивания
+    modalImage.style.userSelect = 'none';
+}
+
+// Функция перемещения
+function onDrag(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    
+    let clientX, clientY;
+    if (e.clientX !== undefined) {
+        clientX = e.clientX;
+        clientY = e.clientY;
+    } else if (e.touches) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+    }
+    
+    translateX = clientX - startX;
+    translateY = clientY - startY;
+    updateTransform();
+}
+
+// Функция окончания перетаскивания
+function endDrag() {
+    isDragging = false;
+    modalImage.style.cursor = scale > 1 ? 'grab' : 'default';
+    modalImage.style.userSelect = '';
+}
+
+// === Обработчики для ЛКМ (левая кнопка мыши) ===
+modalImage.addEventListener('mousedown', startDrag);
+window.addEventListener('mousemove', onDrag);
+window.addEventListener('mouseup', endDrag);
+
+// === Обработчики для ПКМ (правая кнопка мыши) ===
+modalImage.addEventListener('contextmenu', (e) => {
+    e.preventDefault(); // Отключаем стандартное контекстное меню
+    if (scale <= 1) return;
+    // Начинаем перетаскивание с правой кнопки
+    startDrag(e);
+    return false;
+});
+
+// === Обработчики для СКМ (средняя кнопка / колесико) ===
+modalImage.addEventListener('auxclick', (e) => {
+    e.preventDefault();
+    if (e.button === 1) { // button === 1 это средняя кнопка
+        if (scale <= 1) return;
+        startDrag(e);
+    }
+    return false;
+});
+
+// Колесико мыши для масштабирования (zoom)
+modalImage.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    if (e.deltaY < 0) {
+        zoomIn();
+    } else if (e.deltaY > 0) {
+        zoomOut();
+    }
+});
+
+// Предотвращаем контекстное меню на всём модальном окне
+modal.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    return false;
+});
+
+// Сброс курсора при выходе за пределы окна
+window.addEventListener('mouseleave', () => {
+    if (isDragging) {
+        endDrag();
+    }
+});
+
+// Кнопки управления
+closeBtn.addEventListener('click', closeModalFunc);
+prevBtn.addEventListener('click', prevImage);
+nextBtn.addEventListener('click', nextImage);
+zoomInBtn.addEventListener('click', zoomIn);
+zoomOutBtn.addEventListener('click', zoomOut);
+resetZoomBtn.addEventListener('click', resetZoom);
+
+// Закрытие по клику на фон
+modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModalFunc();
+});
+
+// Клавиатурные сокращения
+document.addEventListener('keydown', (e) => {
+    if (modal.style.display === 'flex') {
+        if (e.key === 'Escape') closeModalFunc();
+        if (e.key === 'ArrowLeft') prevImage();
+        if (e.key === 'ArrowRight') nextImage();
+        if (e.key === '+' || e.key === '=') zoomIn();
+        if (e.key === '-') zoomOut();
+        if (e.key === '0') resetZoom();
+    }
+});
 
         // Уведомление
         const notificationModal = document.getElementById('notificationModal');

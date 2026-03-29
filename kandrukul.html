@@ -6,7 +6,6 @@
     <title>Озеро Кандрыкуль - Башкортостан</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Стили такие же как в bannoe-lake.html, меняем только цвета акцента */
         :root {
             --primary: #98783cbb;
             --secondary: #b68f59b4;
@@ -17,10 +16,9 @@
 
         ::selection {
             background-color: #b68f59;
-            color:rgb(255, 248, 237)
+            color: rgb(255, 248, 237);
         }
         
-        /* Остальные стили такие же как в bannoe-lake.html */
         * {
             margin: 0;
             padding: 0;
@@ -40,6 +38,9 @@
             color: white;
             padding: 1rem 2rem;
             position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
             width: 100%;
             z-index: 1000;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -235,6 +236,7 @@
             height: 250px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .gallery-item:hover {
@@ -251,6 +253,109 @@
 
         .gallery-item:hover img {
             transform: scale(1.1);
+        }
+
+        /* Modal для галереи */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-modal-content {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 90%;
+            height: 90%;
+            max-width: 1400px;
+        }
+
+        .image-modal-img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 10px;
+            user-select: none;
+            -webkit-user-drag: none;
+            transition: transform 0.1s ease-out;
+            cursor: default;
+        }
+
+        .image-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 2001;
+        }
+
+        .image-modal-close:hover {
+            color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .modal-image-title {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.5);
+            padding: 8px 20px;
+            border-radius: 40px;
+            backdrop-filter: blur(5px);
+            z-index: 2001;
+            white-space: nowrap;
+        }
+
+        .modal-zoom-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            background: rgba(0,0,0,0.6);
+            padding: 10px 20px;
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+            z-index: 2001;
+        }
+
+        .modal-zoom-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+        }
+
+        .modal-zoom-btn:hover {
+            background: var(--accent);
+            color: var(--dark);
+            transform: scale(1.05);
         }
 
         /* Activities Section */
@@ -388,6 +493,56 @@
             .lake-hero h1 {
                 font-size: 2.2rem;
             }
+            
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 1rem;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 0.5rem 0;
+            }
+            
+            .navbar {
+                flex-wrap: wrap;
+            }
+            
+            .mobile-menu {
+                display: block;
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+            
+            .modal-image-title {
+                font-size: 0.9rem;
+                white-space: nowrap;
+                top: 15px;
+                padding: 5px 12px;
+            }
+            
+            .modal-zoom-controls {
+                bottom: 15px;
+                gap: 8px;
+                padding: 6px 15px;
+            }
+            
+            .modal-zoom-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .mobile-menu {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -398,6 +553,9 @@
             <div class="logo">
                 <i class="fas fa-mountain"></i>
                 <a href="index.html">Туризм Башкортостана</a>
+            </div>
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
             </div>
             <ul class="nav-links">
                 <li><a href="index.html#lakes">Все озера</a></li>
@@ -420,7 +578,7 @@
     <section class="lake-details">
         <div class="details-grid">
             <div class="lake-info">
-                <h2>О озере</h2>
+                <h2>Об озере</h2>
                 <p>Озеро Кандрыкуль — второе по величине озеро Башкортостана, расположенное в Туймазинском районе. Озеро славится своими живописными берегами, чистой водой и уникальными островами.</p>
                 <p>Название озера происходит от башкирских слов "кан" — "кровь" и "ды" — "озеро", что связано с легендой о битве, произошедшей на его берегах. Однако есть и другие версии происхождения названия.</p>
                 <p>Озеро имеет карстовое происхождение и питается подземными источниками. На озере расположено несколько островов, самый крупный из которых — Утрау. Берега разнообразны: от пологих песчаных пляжей до крутых обрывистых склонов.</p>
@@ -459,15 +617,29 @@
         <div class="lake-gallery">
             <h2 class="gallery-title">Галерея</h2>
             <div class="gallery-grid">
-                <div class="gallery-item">
+                <div class="gallery-item" data-img="Кандрыкуль.jpg" data-title="Озеро Кандрыкуль - панорама">
                     <img src="Кандрыкуль.jpg" alt="Озеро Кандрыкуль">
                 </div>
-                <div class="gallery-item">
+                <div class="gallery-item" data-img="Берег Кандрыкуль.jpg" data-title="Берег озера Кандрыкуль">
                     <img src="Берег Кандрыкуль.jpg" alt="Берег Кандрыкуля">
                 </div>
-                <div class="gallery-item">
+                <div class="gallery-item" data-img="Зима кандрыкуль.jpg" data-title="Озеро Кандрыкуль зимой">
                     <img src="Зима кандрыкуль.jpg" alt="Зимний Кандрыкуль">
                 </div>
+            </div>
+        </div>
+
+        <!-- Modal для просмотра изображений -->
+        <div id="imageModal" class="image-modal">
+            <span class="image-modal-close">&times;</span>
+            <div class="modal-image-title" id="modalImageTitle">Название изображения</div>
+            <div class="image-modal-content">
+                <img class="image-modal-img" id="modalImage" src="" alt="" draggable="false">
+            </div>
+            <div class="modal-zoom-controls">
+                <button class="modal-zoom-btn" id="zoomInBtn"><i class="fas fa-search-plus"></i></button>
+                <button class="modal-zoom-btn" id="zoomOutBtn"><i class="fas fa-search-minus"></i></button>
+                <button class="modal-zoom-btn" id="resetZoomBtn"><i class="fas fa-sync-alt"></i></button>
             </div>
         </div>
 
@@ -536,14 +708,16 @@
     </footer>
 
     <script>
-        // Smooth scrolling for anchor links
+        // Мобильное меню
+        document.querySelector('.mobile-menu')?.addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                
                 const targetId = this.getAttribute('href');
                 if (targetId === '#') return;
-                
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
                     window.scrollTo({
@@ -553,6 +727,164 @@
                 }
             });
         });
+        
+        // ========== ПОЛНОФУНКЦИОНАЛЬНАЯ ГАЛЕРЕЯ ==========
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const modalTitle = document.getElementById('modalImageTitle');
+        const closeBtn = document.querySelector('.image-modal-close');
+        const zoomInBtn = document.getElementById('zoomInBtn');
+        const zoomOutBtn = document.getElementById('zoomOutBtn');
+        const resetZoomBtn = document.getElementById('resetZoomBtn');
+        
+        let scale = 1;
+        let translateX = 0;
+        let translateY = 0;
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+        let startTranslateX = 0;
+        let startTranslateY = 0;
+        
+        function updateTransform() {
+            modalImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+        }
+        
+        function resetTransform() {
+            scale = 1;
+            translateX = 0;
+            translateY = 0;
+            updateTransform();
+        }
+        
+        function zoomIn() {
+            scale = Math.min(scale + 0.2, 3);
+            updateTransform();
+        }
+        
+        function zoomOut() {
+            scale = Math.max(scale - 0.2, 0.5);
+            if (scale <= 0.5) {
+                translateX = 0;
+                translateY = 0;
+            }
+            updateTransform();
+        }
+        
+        function getMouseCoordinates(e) {
+            if (e.clientX !== undefined) return { x: e.clientX, y: e.clientY };
+            else if (e.touches) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            return { x: 0, y: 0 };
+        }
+        
+        function onMouseDown(e) {
+            if (scale <= 1) return;
+            e.preventDefault();
+            e.stopPropagation();
+            isDragging = true;
+            const coords = getMouseCoordinates(e);
+            startX = coords.x;
+            startY = coords.y;
+            startTranslateX = translateX;
+            startTranslateY = translateY;
+            modalImg.style.cursor = 'grabbing';
+            modalImg.style.userSelect = 'none';
+        }
+        
+        function onMouseMove(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            const coords = getMouseCoordinates(e);
+            const deltaX = coords.x - startX;
+            const deltaY = coords.y - startY;
+            translateX = startTranslateX + deltaX;
+            translateY = startTranslateY + deltaY;
+            updateTransform();
+        }
+        
+        function onMouseUp() {
+            if (!isDragging) return;
+            isDragging = false;
+            modalImg.style.cursor = scale > 1 ? 'grab' : 'default';
+            modalImg.style.userSelect = '';
+        }
+        
+        function openModal(imgSrc, imgTitle) {
+            modal.style.display = 'flex';
+            modalImg.src = imgSrc;
+            modalTitle.textContent = imgTitle;
+            resetTransform();
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+                modalImg.style.cursor = scale > 1 ? 'grab' : 'default';
+            }, 50);
+        }
+        
+        function closeModal() {
+            modal.style.display = 'none';
+            resetTransform();
+            document.body.style.overflow = 'auto';
+        }
+        
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const imgSrc = this.getAttribute('data-img') || this.querySelector('img')?.src;
+                const imgTitle = this.getAttribute('data-title') || 'Изображение';
+                if (imgSrc) openModal(imgSrc, imgTitle);
+            });
+        });
+        
+        modalImg.addEventListener('mousedown', onMouseDown);
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mouseup', onMouseUp);
+        
+        modalImg.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            if (scale > 1) onMouseDown(e);
+            return false;
+        });
+        
+        modalImg.addEventListener('auxclick', (e) => {
+            e.preventDefault();
+            if (e.button === 1 && scale > 1) onMouseDown(e);
+            return false;
+        });
+        
+        modalImg.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            if (e.deltaY < 0) zoomIn();
+            else if (e.deltaY > 0) zoomOut();
+        });
+        
+        modalImg.addEventListener('mouseenter', () => {
+            modalImg.style.cursor = scale > 1 ? 'grab' : 'default';
+        });
+        
+        modal.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            return false;
+        });
+        
+        zoomInBtn.addEventListener('click', zoomIn);
+        zoomOutBtn.addEventListener('click', zoomOut);
+        resetZoomBtn.addEventListener('click', resetTransform);
+        
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if (modal.style.display === 'flex') {
+                if (e.key === 'Escape') closeModal();
+                if (e.key === '+' || e.key === '=') zoomIn();
+                if (e.key === '-') zoomOut();
+                if (e.key === '0') resetTransform();
+            }
+        });
+        
+        modalImg.setAttribute('draggable', 'false');
+        modalImg.style.userSelect = 'none';
     </script>
 </body>
 </html>
