@@ -936,32 +936,84 @@ body {
 
         @media (max-width: 768px) {
             .navbar {
-                flex-direction: column;
-                align-items: flex-start;
+                position: relative;
             }
-            .nav-links {
-                flex-direction: column;
-                width: 100%;
-                margin-top: 1rem;
-                display: none;
-            }
-            .nav-links.active {
-                display: flex;
-            }
-            .nav-links li {
-                margin: 0.5rem 0;
-            }
+            
             .mobile-menu {
-                display: block;
+                display: flex;
                 position: absolute;
-                top: 1rem;
-                right: 2rem;
+                top: 50%;
+                right: 1rem;
+                transform: translateY(-50%);
             }
-            .hero h1 {
-                font-size: 2.5rem;
+            
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(44, 85, 48, 0.85);  /* ← 85% непрозрачности */
+                backdrop-filter: blur(15px);  /* ← сильное размытие */
+                flex-direction: column;
+                padding: 0;
+                margin: 0;
+                max-height: 0;
+                overflow: hidden;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                border-radius: 0 0 20px 20px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+                z-index: 999;
             }
-            section {
-                padding: 3rem 1rem;
+            
+            .nav-links.active {
+                max-height: 500px;
+                opacity: 1;
+                visibility: visible;
+                padding: 1rem 0;
+            }
+            
+            .nav-links li {
+                margin: 0;
+                opacity: 0;
+                transform: translateX(-20px);
+                transition: all 0.3s ease;
+            }
+            
+            .nav-links.active li {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            
+            /* Анимация для каждого пункта меню с задержкой */
+            .nav-links.active li:nth-child(1) { transition-delay: 0.05s; }
+            .nav-links.active li:nth-child(2) { transition-delay: 0.1s; }
+            .nav-links.active li:nth-child(3) { transition-delay: 0.15s; }
+            .nav-links.active li:nth-child(4) { transition-delay: 0.2s; }
+            .nav-links.active li:nth-child(5) { transition-delay: 0.25s; }
+            .nav-links.active li:nth-child(6) { transition-delay: 0.3s; }
+            .nav-links.active li:nth-child(7) { transition-delay: 0.35s; }
+            .nav-links.active li:nth-child(8) { transition-delay: 0.4s; }
+            
+            .nav-links a {
+                display: block;
+                padding: 0.8rem 2rem;
+                text-align: center;
+                font-size: 1.1rem;
+                transition: all 0.2s ease;
+            }
+            
+            .nav-links a:hover {
+                background: rgba(255, 255, 255, 0.1);
+                padding-left: 2.5rem;
+            }
+            
+            .back-btn {
+                display: inline-block;
+                margin-top: 0.5rem;
+                background: var(--accent);
+                color: var(--dark);
             }
         }
     </style>
@@ -973,10 +1025,10 @@ body {
                 <i class="fas fa-mountain"></i>
                 <span>Туризм Башкортостана</span>
             </div>
-            <div class="mobile-menu">
+            <div class="mobile-menu" id="mobileMenuBtn">
                 <i class="fas fa-bars"></i>
             </div>
-            <ul class="nav-links">
+            <ul class="nav-links" id="navLinks">
                 <li><a href="#home">Главная</a></li>
                 <li><a href="#about">О регионе</a></li>
                 <li><a href="#lakes">Озера</a></li>
@@ -1863,7 +1915,7 @@ body {
         renderCurrentQuestion();
     })();
 </script>
-<!-- ========== ПУТЕВОДИТЕЛЬ ПО ЛЕТНЕМУ ОТДЫХУ (исправленный с анимациями) ========== -->
+<!-- ========== ПУТЕВОДИТЕЛЬ ПО ЛЕТНЕМУ ОТДЫХУ (исправленный) ========== -->
 <section class="guide-section" id="guide" style="background: linear-gradient(135deg, #fefcf5 0%, #f8f3e8 100%); padding: 4rem 2rem;">
     <div class="section-title">
         <h2 style="animation: fadeInDown 0.8s ease;">🥾 Летний гид по Башкортостану</h2>
@@ -1873,14 +1925,14 @@ body {
     <div class="guide-categories" style="max-width: 1400px; margin: 0 auto;">
         <!-- КАТЕГОРИЯ 1: Походы в горы -->
         <div class="guide-main-cat">
-            <button class="main-cat-toggle" data-target="cat1">
+            <button class="main-cat-toggle" data-cat="cat1">
                 <span><i class="fas fa-mountain"></i> Походы в горы (на день)</span>
                 <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
             </button>
-            <div id="cat1" class="main-cat-content">
+            <div id="cat1" class="main-cat-content" style="display: none;">
                 <div class="guide-grid">
                     <div class="guide-card">
-                        <div class="card-header" data-target="sub1-1" data-card="card1-1">
+                        <div class="card-header" data-card="sub1-1">
                             <div class="progress-side">
                                 <div class="progress-bar-bg"><div class="progress-fill" id="fill-sub1-1" style="width: 0%;"></div></div>
                                 <span class="read-time"><i class="far fa-clock"></i> 4 мин</span>
@@ -1905,7 +1957,7 @@ body {
                     </div>
 
                     <div class="guide-card">
-                        <div class="card-header" data-target="sub1-2" data-card="card1-2">
+                        <div class="card-header" data-card="sub1-2">
                             <div class="progress-side">
                                 <div class="progress-bar-bg"><div class="progress-fill" id="fill-sub1-2" style="width: 0%;"></div></div>
                                 <span class="read-time"><i class="far fa-clock"></i> 5 мин</span>
@@ -1924,7 +1976,7 @@ body {
                     </div>
 
                     <div class="guide-card">
-                        <div class="card-header" data-target="sub1-3" data-card="card1-3">
+                        <div class="card-header" data-card="sub1-3">
                             <div class="progress-side">
                                 <div class="progress-bar-bg"><div class="progress-fill" id="fill-sub1-3" style="width: 0%;"></div></div>
                                 <span class="read-time"><i class="far fa-clock"></i> 3 мин</span>
@@ -1946,14 +1998,14 @@ body {
 
         <!-- КАТЕГОРИЯ 2: Пляжный отдых -->
         <div class="guide-main-cat">
-            <button class="main-cat-toggle" data-target="cat2">
+            <button class="main-cat-toggle" data-cat="cat2">
                 <span><i class="fas fa-umbrella-beach"></i> Пляжный отдых (озёра Башкирии)</span>
                 <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
             </button>
-            <div id="cat2" class="main-cat-content">
+            <div id="cat2" class="main-cat-content" style="display: none;">
                 <div class="guide-grid">
                     <div class="guide-card">
-                        <div class="card-header" data-target="sub2-1" data-card="card2-1">
+                        <div class="card-header" data-card="sub2-1">
                             <div class="progress-side"><div class="progress-bar-bg"><div class="progress-fill" id="fill-sub2-1"></div></div><span class="read-time"><i class="far fa-clock"></i> 4 мин</span></div>
                             <h3><i class="fas fa-water"></i> Что брать на озёра</h3>
                             <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
@@ -1967,7 +2019,7 @@ body {
                         </div>
                     </div>
                     <div class="guide-card">
-                        <div class="card-header" data-target="sub2-2" data-card="card2-2">
+                        <div class="card-header" data-card="sub2-2">
                             <div class="progress-side"><div class="progress-bar-bg"><div class="progress-fill" id="fill-sub2-2"></div></div><span class="read-time"><i class="far fa-clock"></i> 2 мин</span></div>
                             <h3><i class="fas fa-temperature-high"></i> Температура воды и комфортные дни</h3>
                             <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
@@ -1980,7 +2032,7 @@ body {
                         </div>
                     </div>
                     <div class="guide-card">
-                        <div class="card-header" data-target="sub2-3" data-card="card2-3">
+                        <div class="card-header" data-card="sub2-3">
                             <div class="progress-side"><div class="progress-bar-bg"><div class="progress-fill" id="fill-sub2-3"></div></div><span class="read-time"><i class="far fa-clock"></i> 3 мин</span></div>
                             <h3><i class="fas fa-car"></i> Топ-3 озера с удобными пляжами</h3>
                             <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
@@ -2001,14 +2053,14 @@ body {
 
         <!-- КАТЕГОРИЯ 3: Многодневные походы -->
         <div class="guide-main-cat">
-            <button class="main-cat-toggle" data-target="cat3">
+            <button class="main-cat-toggle" data-cat="cat3">
                 <span><i class="fas fa-campground"></i> Многодневные походы (2–4 дня)</span>
                 <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
             </button>
-            <div id="cat3" class="main-cat-content">
+            <div id="cat3" class="main-cat-content" style="display: none;">
                 <div class="guide-grid">
                     <div class="guide-card">
-                        <div class="card-header" data-target="sub3-1" data-card="card3-1">
+                        <div class="card-header" data-card="sub3-1">
                             <div class="progress-side"><div class="progress-bar-bg"><div class="progress-fill" id="fill-sub3-1"></div></div><span class="read-time"><i class="far fa-clock"></i> 6 мин</span></div>
                             <h3><i class="fas fa-tent"></i> Снаряжение для ночёвки</h3>
                             <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
@@ -2022,7 +2074,7 @@ body {
                         </div>
                     </div>
                     <div class="guide-card">
-                        <div class="card-header" data-target="sub3-2" data-card="card3-2">
+                        <div class="card-header" data-card="sub3-2">
                             <div class="progress-side"><div class="progress-bar-bg"><div class="progress-fill" id="fill-sub3-2"></div></div><span class="read-time"><i class="far fa-clock"></i> 4 мин</span></div>
                             <h3><i class="fas fa-first-aid"></i> Медицина и безопасность</h3>
                             <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
@@ -2039,14 +2091,14 @@ body {
 
         <!-- КАТЕГОРИЯ 4: Рыбалка -->
         <div class="guide-main-cat">
-            <button class="main-cat-toggle" data-target="cat4">
+            <button class="main-cat-toggle" data-cat="cat4">
                 <span><i class="fas fa-fish"></i> Рыбалка и водные виды спорта</span>
                 <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
             </button>
-            <div id="cat4" class="main-cat-content">
+            <div id="cat4" class="main-cat-content" style="display: none;">
                 <div class="guide-grid">
                     <div class="guide-card">
-                        <div class="card-header" data-target="sub4-1" data-card="card4-1">
+                        <div class="card-header" data-card="sub4-1">
                             <div class="progress-side"><div class="progress-bar-bg"><div class="progress-fill" id="fill-sub4-1"></div></div><span class="read-time"><i class="far fa-clock"></i> 4 мин</span></div>
                             <h3><i class="fas fa-fishing-rod"></i> Лучшие места для рыбалки</h3>
                             <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
@@ -2058,7 +2110,7 @@ body {
                         </div>
                     </div>
                     <div class="guide-card">
-                        <div class="card-header" data-target="sub4-2" data-card="card4-2">
+                        <div class="card-header" data-card="sub4-2">
                             <div class="progress-side"><div class="progress-bar-bg"><div class="progress-fill" id="fill-sub4-2"></div></div><span class="read-time"><i class="far fa-clock"></i> 2 мин</span></div>
                             <h3><i class="fas fa-wind"></i> Виндсерфинг на Аслыкуле</h3>
                             <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
@@ -2075,14 +2127,14 @@ body {
 
         <!-- КАТЕГОРИЯ 5: Запасной план -->
         <div class="guide-main-cat">
-            <button class="main-cat-toggle" data-target="cat5">
+            <button class="main-cat-toggle" data-cat="cat5">
                 <span><i class="fas fa-cloud-rain"></i> Запасной план (музеи, пещеры, СПА)</span>
                 <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
             </button>
-            <div id="cat5" class="main-cat-content">
+            <div id="cat5" class="main-cat-content" style="display: none;">
                 <div class="guide-grid">
                     <div class="guide-card">
-                        <div class="card-header" data-target="sub5-1" data-card="card5-1">
+                        <div class="card-header" data-card="sub5-1">
                             <div class="progress-side"><div class="progress-bar-bg"><div class="progress-fill" id="fill-sub5-1"></div></div><span class="read-time"><i class="far fa-clock"></i> 3 мин</span></div>
                             <h3><i class="fas fa-archway"></i> Капова пещера (Шульган-Таш)</h3>
                             <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
@@ -2094,7 +2146,7 @@ body {
                         </div>
                     </div>
                     <div class="guide-card">
-                        <div class="card-header" data-target="sub5-2" data-card="card5-2">
+                        <div class="card-header" data-card="sub5-2">
                             <div class="progress-side"><div class="progress-bar-bg"><div class="progress-fill" id="fill-sub5-2"></div></div><span class="read-time"><i class="far fa-clock"></i> 2 мин</span></div>
                             <h3><i class="fas fa-hot-tub"></i> Термы и базы отдыха</h3>
                             <span class="card-toggle"><i class="fas fa-chevron-down"></i></span>
@@ -2120,16 +2172,16 @@ body {
     .main-cat-toggle:hover { background: linear-gradient(135deg, #f5ecdf 0%, #efe2cd 100%); padding-left: 2.2rem; }
     .main-cat-toggle span:first-child i { margin-right: 12px; }
     .toggle-icon { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: inline-block; }
-    .main-cat-toggle.active-toggle .toggle-icon { transform: rotate(180deg); }
+    .main-cat-toggle.active .toggle-icon { transform: rotate(180deg); }
     
-    .main-cat-content { display: none; padding: 1.5rem 1.2rem 2rem; background: #fffef8; border-top: 2px solid #e2d5bb; }
+    .main-cat-content { padding: 1.5rem 1.2rem 2rem; background: #fffef8; border-top: 2px solid #e2d5bb; animation: slideDown 0.4s ease; }
     
     .guide-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 1.8rem; }
     
     .guide-card { background: white; border-radius: 24px; box-shadow: 0 6px 14px rgba(0,0,0,0.05); border: 1px solid #f0e5d2; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
     .guide-card:hover { transform: translateY(-5px); box-shadow: 0 20px 30px -12px rgba(0,0,0,0.15); }
     
-    .card-header { display: flex; align-items: center; gap: 12px; padding: 1rem 1.2rem; background: #fefaf2; cursor: pointer; border-bottom: 1px solid #f0e5d2; flex-wrap: wrap; transition: background 0.2s ease; position: relative; z-index: 2; }
+    .card-header { display: flex; align-items: center; gap: 12px; padding: 1rem 1.2rem; background: #fefaf2; cursor: pointer; border-bottom: 1px solid #f0e5d2; flex-wrap: wrap; transition: background 0.2s ease; }
     .card-header:hover { background: #fef5e8; }
     .card-header h3 { flex: 2; font-size: 1.15rem; margin: 0; display: flex; align-items: center; gap: 8px; color: #4a6741; }
     .card-header h3 i { color: #8fb996; font-size: 1.2rem; }
@@ -2141,102 +2193,25 @@ body {
     .read-time { font-size: 0.7rem; color: #7f6e4a; white-space: nowrap; background: #f0e5d2; padding: 3px 8px; border-radius: 30px; }
     
     .card-toggle { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; color: #b59a6b; margin-left: auto; }
-    .card-header.open-toggle .card-toggle { transform: rotate(180deg); }
+    .card-header.open .card-toggle { transform: rotate(180deg); }
     
-    /* Анимация для выдвижения контента */
-    .card-content { 
-        display: none; 
-        padding: 0 1.5rem;
-        line-height: 1.65; 
-        background: #ffffff; 
-        border-top: 1px solid #f5ecdf;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
-        width: 100%;
-        box-sizing: border-box;
-    }
-    
-    .card-content.open {
-        display: block;
-        padding: 1.5rem;
-        max-height: 600px;
-        overflow-y: auto;
-        animation: slideDown 0.4s ease-out;
-    }
+    .card-content { display: none; padding: 1.5rem; line-height: 1.65; background: #ffffff; border-top: 1px solid #f5ecdf; width: 100%; box-sizing: border-box; max-height: 500px; overflow-y: auto; animation: slideDown 0.3s ease; }
+    .card-content.open { display: block; }
     
     @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
     
-    /* Анимация для заголовков карточек при открытии категории */
-    .guide-card {
-        opacity: 0;
-        transform: translateY(20px);
-        animation: cardReveal 0.4s ease forwards;
-    }
-    
-    @keyframes cardReveal {
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    /* Задержки для анимации карточек */
-    .guide-card:nth-child(1) { animation-delay: 0.05s; }
-    .guide-card:nth-child(2) { animation-delay: 0.1s; }
-    .guide-card:nth-child(3) { animation-delay: 0.15s; }
-    .guide-card:nth-child(4) { animation-delay: 0.2s; }
-    
-    .text-content {
-        width: 100%;
-        box-sizing: border-box;
-    }
-    
-    .text-content p, .text-content ul { 
-        margin-bottom: 0.8rem; 
-        color: #3a3a3a;
-        width: 100%;
-    }
-    .text-content li { 
-        margin-left: 1.4rem; 
-        margin-bottom: 0.4rem;
-        word-break: break-word;
-    }
+    .text-content { width: 100%; box-sizing: border-box; }
+    .text-content p, .text-content ul { margin-bottom: 0.8rem; color: #3a3a3a; width: 100%; }
+    .text-content li { margin-left: 1.4rem; margin-bottom: 0.4rem; word-break: break-word; }
     .text-content strong { color: #4a6741; }
     
-    .tip-box { 
-        background: linear-gradient(135deg, #e8f3e6, #d9ead5); 
-        padding: 12px 16px; 
-        border-radius: 16px; 
-        margin-top: 12px; 
-        border-left: 4px solid #8fb996; 
-        font-size: 0.9rem; 
-        color: #3a5a3a;
-        width: 100%;
-        box-sizing: border-box;
-    }
+    .tip-box { background: linear-gradient(135deg, #e8f3e6, #d9ead5); padding: 12px 16px; border-radius: 16px; margin-top: 12px; border-left: 4px solid #8fb996; font-size: 0.9rem; color: #3a5a3a; width: 100%; box-sizing: border-box; }
     .tip-box i { margin-right: 8px; color: #6a9c7a; }
     
-    .weather-warning { 
-        background: #fff3e0; 
-        padding: 12px 16px; 
-        border-radius: 16px; 
-        margin-top: 12px; 
-        border-left: 4px solid #e67e22; 
-        font-size: 0.9rem; 
-        color: #b45f1b;
-        width: 100%;
-        box-sizing: border-box;
-    }
+    .weather-warning { background: #fff3e0; padding: 12px 16px; border-radius: 16px; margin-top: 12px; border-left: 4px solid #e67e22; font-size: 0.9rem; color: #b45f1b; width: 100%; box-sizing: border-box; }
     .weather-warning i { margin-right: 8px; color: #e67e22; }
     
     .card-content::-webkit-scrollbar { width: 6px; }
@@ -2253,60 +2228,66 @@ body {
     }
     
     @media (max-width: 700px) { 
-        .guide-grid { 
-            grid-template-columns: 1fr; 
-        } 
-        .card-header { 
-            flex-direction: column; 
-            align-items: stretch; 
-        } 
-        .progress-side { 
-            justify-content: space-between; 
-        }
-        .text-content li {
-            margin-left: 1rem;
-        }
+        .guide-grid { grid-template-columns: 1fr; } 
+        .card-header { flex-direction: column; align-items: stretch; } 
+        .progress-side { justify-content: space-between; }
+        .text-content li { margin-left: 1rem; }
     }
 </style>
 
 <script>
     (function() {
-        // Анимация для главных категорий
+        // ========== РАБОТА С КАТЕГОРИЯМИ (ОСНОВНЫЕ РАЗДЕЛЫ) ==========
         const mainToggles = document.querySelectorAll('.main-cat-toggle');
+        
         mainToggles.forEach(btn => {
             btn.addEventListener('click', function(e) {
+                e.preventDefault();
                 e.stopPropagation();
-                const targetId = this.getAttribute('data-target');
-                const content = document.getElementById(targetId);
+                
+                const catId = this.getAttribute('data-cat');
+                const content = document.getElementById(catId);
+                
+                if (!content) return;
+                
                 const isOpen = content.style.display === 'block';
                 
-                if (isOpen) {
-                    content.style.display = 'none';
-                    this.classList.remove('active-toggle');
-                } else {
+                // Закрываем все категории
+                document.querySelectorAll('.main-cat-content').forEach(cat => {
+                    cat.style.display = 'none';
+                });
+                
+                // Убираем класс active у всех кнопок
+                mainToggles.forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Если категория была закрыта - открываем
+                if (!isOpen) {
                     content.style.display = 'block';
-                    this.classList.add('active-toggle');
+                    this.classList.add('active');
+                    
                     // Анимация для карточек внутри открытой категории
                     const cards = content.querySelectorAll('.guide-card');
                     cards.forEach((card, idx) => {
                         card.style.animation = 'none';
-                        card.offsetHeight; // reflow
-                        card.style.animation = `cardReveal 0.4s ease forwards ${idx * 0.05}s`;
+                        card.offsetHeight;
+                        card.style.animation = `slideDown 0.4s ease forwards ${idx * 0.05}s`;
                     });
                 }
             });
         });
         
-        // Открываем первую категорию
+        // Открываем первую категорию по умолчанию
         const firstCat = document.getElementById('cat1');
-        if (firstCat) {
+        const firstBtn = document.querySelector('.main-cat-toggle[data-cat="cat1"]');
+        if (firstCat && firstBtn) {
             firstCat.style.display = 'block';
-            const firstBtn = document.querySelector('.main-cat-toggle[data-target="cat1"]');
-            if (firstBtn) firstBtn.classList.add('active-toggle');
+            firstBtn.classList.add('active');
         }
         
-        // Прогресс чтения и управление открытием карточек (только одна открыта)
-        const storageKey = 'guideProgressV5';
+        // ========== РАБОТА С КАРТОЧКАМИ (ТЕКСТАМИ) ==========
+        const storageKey = 'guideProgressFinal';
         let currentlyOpenCard = null;
         
         function saveProgress(cardId, percent) {
@@ -2320,13 +2301,12 @@ body {
             return prog[cardId] || 0;
         }
         
-        function closeCard(contentDiv, headerElement, fillId) {
+        function closeCard(contentDiv, headerElement) {
             if (!contentDiv) return;
             contentDiv.classList.remove('open');
             if (headerElement) {
-                headerElement.classList.remove('open-toggle');
+                headerElement.classList.remove('open');
             }
-            // Не закрываем через display, используем класс open
         }
         
         function openCard(contentDiv, headerElement, fillId, cardId) {
@@ -2335,14 +2315,13 @@ body {
             // Закрываем текущую открытую карточку
             if (currentlyOpenCard && currentlyOpenCard !== contentDiv) {
                 const oldHeader = currentlyOpenCard.closest('.guide-card')?.querySelector('.card-header');
-                const oldFillId = currentlyOpenCard.id ? 'fill-' + currentlyOpenCard.id : null;
-                closeCard(currentlyOpenCard, oldHeader, oldFillId);
+                closeCard(currentlyOpenCard, oldHeader);
             }
             
             // Открываем новую
             contentDiv.classList.add('open');
             if (headerElement) {
-                headerElement.classList.add('open-toggle');
+                headerElement.classList.add('open');
             }
             currentlyOpenCard = contentDiv;
             
@@ -2362,10 +2341,9 @@ body {
         
         // Настройка всех карточек
         document.querySelectorAll('.card-header').forEach(header => {
-            const targetId = header.getAttribute('data-target');
-            const contentDiv = document.getElementById(targetId);
-            const fillId = 'fill-' + targetId;
-            const cardId = targetId;
+            const cardId = header.getAttribute('data-card');
+            const contentDiv = document.getElementById(cardId);
+            const fillId = 'fill-' + cardId;
             
             if (contentDiv) {
                 // Загружаем сохранённый прогресс для отображения на полоске
@@ -2391,7 +2369,7 @@ body {
                     
                     if (isOpen) {
                         // Закрываем текущую карточку
-                        closeCard(contentDiv, header, fillId);
+                        closeCard(contentDiv, header);
                         currentlyOpenCard = null;
                     } else {
                         // Открываем карточку (закроет предыдущую автоматически)
@@ -2404,91 +2382,14 @@ body {
             }
         });
         
-        // При загрузке страницы проверяем, нет ли сохранённых открытых карточек (обычно нет)
-        // Но если есть сохранённый прогресс > 0, не открываем автоматически
-        
         // Анимация для карточек в уже открытой категории при загрузке
         const openCat = document.querySelector('.main-cat-content[style*="display: block"]');
         if (openCat) {
             const cards = openCat.querySelectorAll('.guide-card');
             cards.forEach((card, idx) => {
-                card.style.animation = `cardReveal 0.4s ease forwards ${idx * 0.05}s`;
+                card.style.animation = `slideDown 0.4s ease forwards ${idx * 0.05}s`;
             });
         }
-    })();
-</script>
-
-<script>
-    (function() {
-        // Анимация для главных категорий
-        const mainToggles = document.querySelectorAll('.main-cat-toggle');
-        mainToggles.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const targetId = this.getAttribute('data-target');
-                const content = document.getElementById(targetId);
-                const isOpen = content.style.display === 'block';
-                content.style.display = isOpen ? 'none' : 'block';
-                this.classList.toggle('active-toggle', !isOpen);
-            });
-        });
-        
-        // Открываем первую категорию
-        const firstCat = document.getElementById('cat1');
-        if (firstCat) {
-            firstCat.style.display = 'block';
-            const firstBtn = document.querySelector('.main-cat-toggle[data-target="cat1"]');
-            if (firstBtn) firstBtn.classList.add('active-toggle');
-        }
-        
-        // Прогресс чтения
-        const storageKey = 'guideProgressV4';
-        function saveProgress(cardId, percent) {
-            let prog = JSON.parse(localStorage.getItem(storageKey) || '{}');
-            prog[cardId] = percent;
-            localStorage.setItem(storageKey, JSON.stringify(prog));
-        }
-        function loadProgress(cardId) {
-            let prog = JSON.parse(localStorage.getItem(storageKey) || '{}');
-            return prog[cardId] || 0;
-        }
-        
-        document.querySelectorAll('.card-header').forEach(header => {
-            const targetId = header.getAttribute('data-target');
-            const contentDiv = document.getElementById(targetId);
-            const fillId = 'fill-' + targetId;
-            if (contentDiv) {
-                const saved = loadProgress(targetId);
-                const fill = document.getElementById(fillId);
-                if (fill && saved > 0) fill.style.width = saved + '%';
-                
-                contentDiv.addEventListener('scroll', function() {
-                    const scrollTop = this.scrollTop;
-                    const scrollHeight = this.scrollHeight - this.clientHeight;
-                    let percent = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
-                    percent = Math.min(100, Math.max(0, percent));
-                    const fillElem = document.getElementById(fillId);
-                    if (fillElem) fillElem.style.width = percent + '%';
-                    saveProgress(targetId, percent);
-                });
-                
-                header.addEventListener('click', () => {
-                    const isOpen = contentDiv.style.display === 'block';
-                    contentDiv.style.display = isOpen ? 'none' : 'block';
-                    header.classList.toggle('open-toggle', !isOpen);
-                    if (!isOpen) {
-                        const savedPercent = loadProgress(targetId);
-                        const fillElem = document.getElementById(fillId);
-                        if (fillElem) fillElem.style.width = savedPercent + '%';
-                        if (savedPercent > 0) {
-                            const scrollHeight = contentDiv.scrollHeight - contentDiv.clientHeight;
-                            contentDiv.scrollTop = (savedPercent / 100) * scrollHeight;
-                        }
-                    }
-                });
-                contentDiv.style.display = 'none';
-            }
-        });
     })();
 </script>
 
@@ -2522,7 +2423,7 @@ body {
             </div>
             <div class="footer-column">
                 <h3>Об авторе</h3>
-                <p>Автор - 13-летний ученик 7 класса. Этот сайт был сделан в программе VSCode, используя языки HTML, CSS, JS, за 9-10 дней работы.</p>
+                <p>Автор - молодой 13-летний программист, опыт менее года. Этот сайт был сделан в программе VSCode, используя языки HTML, CSS, JS, за маленький срок - примерно 7 дней.</p>
                 <div class="social-links">
                     <a href="https://vk.com/zweltov"><i class="fab fa-vk"></i></a>
                     <a href="https://t.me/Zweltov"><i class="fab fa-telegram"></i></a>
@@ -2579,10 +2480,58 @@ body {
     </div>
 
     <script>
-        // Мобильное меню
-        document.querySelector('.mobile-menu').addEventListener('click', function() {
-            document.querySelector('.nav-links').classList.toggle('active');
+// ========== АНИМИРОВАННОЕ МОБИЛЬНОЕ МЕНЮ ==========
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const navLinks = document.getElementById('navLinks');
+let menuOpen = false;
+
+if (mobileMenuBtn && navLinks) {
+    mobileMenuBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        menuOpen = !menuOpen;
+        
+        if (menuOpen) {
+            navLinks.classList.add('active');
+            mobileMenuBtn.classList.add('active');
+            // Меняем иконку на крестик
+            mobileMenuBtn.innerHTML = '<i class="fas fa-times"></i>';
+        } else {
+            navLinks.classList.remove('active');
+            mobileMenuBtn.classList.remove('active');
+            mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        }
+    });
+    
+    // Закрытие меню при клике на ссылку
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            mobileMenuBtn.classList.remove('active');
+            mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            menuOpen = false;
         });
+    });
+    
+    // Закрытие меню при клике вне его
+    document.addEventListener('click', function(e) {
+        if (menuOpen && !navLinks.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+            navLinks.classList.remove('active');
+            mobileMenuBtn.classList.remove('active');
+            mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            menuOpen = false;
+        }
+    });
+}
+
+// При изменении размера окна, если меню открыто и ширина стала больше 768px, закрываем
+window.addEventListener('resize', function() {
+    if (window.innerWidth > 768 && menuOpen) {
+        navLinks.classList.remove('active');
+        mobileMenuBtn.classList.remove('active');
+        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        menuOpen = false;
+    }
+});
 
         // Эффект скролла хедера
         window.addEventListener('scroll', function() {
